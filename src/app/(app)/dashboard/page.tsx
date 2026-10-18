@@ -36,7 +36,10 @@ export default async function DashboardPage({ searchParams }: { searchParams: Se
   const t = await getTranslations("dashboard");
   const tEnum = await getTranslations("enums");
 
-  const transactions = portfolio ? await listTransactions(supabase, { portfolioId: portfolio.id }) : [];
+  const [transactions, watchIds] = await Promise.all([
+    portfolio ? listTransactions(supabase, { portfolioId: portfolio.id }) : Promise.resolve([]),
+    listWatchlistIds(supabase),
+  ]);
   const firstName = profile.display_name?.split(" ")[0];
   const greeting = firstName ? t("greetingName", { name: firstName }) : t("greeting");
 
@@ -83,13 +86,12 @@ export default async function DashboardPage({ searchParams }: { searchParams: Se
   const today = isoDay();
   const in30 = isoDay(30);
 
-  const [view, history, news, watchIds] = await Promise.all([
+  const [view, history, news, events] = await Promise.all([
     buildPortfolioView(supabase, transactions, base),
     buildValueHistory(supabase, transactions, base, ranges[range]),
     listNews(supabase, { assetIds: heldIds, limit: 4 }),
-    listWatchlistIds(supabase),
+    listEvents(supabase, { from: today, to: in30, assetIds: [...new Set([...heldIds, ...watchIds])] }),
   ]);
-  const events = await listEvents(supabase, { from: today, to: in30, assetIds: [...new Set([...heldIds, ...watchIds])] });
 
   const { summary, positions } = view;
   const open = positions.filter((p) => p.quantity > 0);

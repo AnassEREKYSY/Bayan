@@ -1,9 +1,11 @@
 import { CalendarDays, Newspaper, Plus } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { after } from "next/server";
 import { getTranslations } from "next-intl/server";
 
 import { LineChart } from "@/components/charts/line-chart";
+import { TransactionList } from "@/components/finance/transaction-list";
 import { AssetAvatar, ChangeBadge, Money, Pct } from "@/components/finance/display";
 import { parseRange, RangeTabs, ranges } from "@/components/finance/range-tabs";
 import { AlertDialog } from "@/components/forms/alert-dialog";
@@ -44,12 +46,20 @@ export default async function AssetPage({ params, searchParams }: { params: Para
   const range = parseRange(firstParam(sp.range));
 
   const { supabase, locale } = await getPageContext();
-  // Assets nobody follows aren't refreshed daily: fetch a new price on view.
-  await ensureFreshAsset(createAdminClient(), id);
-  const asset = await getAsset(supabase, id);
+  let asset = await getAsset(supabase, id);
   if (!asset) notFound();
+  // Assets nobody follows aren't refreshed daily: refresh on view. Wait only
+  // when there is no price at all; otherwise show the last one immediately and
+  // refresh after the response is sent.
+  if (!asset.quote) {
+    await ensureFreshAsset(createAdminClient(), id);
+    asset = (await getAsset(supabase, id)) ?? asset;
+  } else {
+    after(() => ensureFreshAsset(createAdminClient(), id));
+  }
 
   const t = await getTranslations("asset");
+  const tTx = await getTranslations("transactions");
   const tEnum = await getTranslations("enums");
   const from = isoDay(-ranges[range]);
   const today = isoDay();
@@ -184,6 +194,15 @@ export default async function AssetPage({ params, searchParams }: { params: Para
           </CardBody>
         </Card>
       </div>
+
+      {transactions.length ? (
+        <Card className="mt-4">
+          <CardHeader title={tTx("yourOperations")} description={tTx("yourOperationsHint")} />
+          <div className="mt-2 border-t border-border">
+            <TransactionList items={transactions} locale={locale} assets={[option]} portfolios={portfolios} showAsset={false} />
+          </div>
+        </Card>
+      ) : null}
 
       <div className="mt-4 grid gap-4 lg:grid-cols-5">
         <Card className="lg:col-span-3">

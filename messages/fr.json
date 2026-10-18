@@ -35,7 +35,8 @@
     "close": "Fermer",
     "save": "Enregistrer",
     "saving": "Enregistrement…",
-    "create": "Créer"
+    "create": "Créer",
+    "cancel": "Annuler"
   },
   "forms": {
     "chooseAsset": "Choisir un actif"
@@ -234,7 +235,11 @@
     "filter": "Filtrer par type",
     "all": "Toutes",
     "emptyTitle": "Aucune opération",
-    "emptyText": "Votre historique apparaîtra ici."
+    "emptyText": "Votre historique apparaîtra ici.",
+    "deleteHint": "Elle disparaît de votre historique, et vos totaux et plus-values sont recalculés. C'est définitif.",
+    "yourOperations": "Vos opérations",
+    "yourOperationsHint": "Modifiez-les ou supprimez-les ici en cas d'erreur.",
+    "editHint": "Changez un champ et enregistrez : vos totaux se mettent à jour aussitôt."
   },
   "markets": {
     "noPrice": "Pas encore de cours",

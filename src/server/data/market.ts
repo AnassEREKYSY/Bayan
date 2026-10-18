@@ -41,6 +41,19 @@ export async function listAssets(
   return (data ?? []) as unknown as AssetWithQuote[];
 }
 
+/** Light list for pickers (no quotes): id, symbol, name, market, currency. */
+export async function listAssetOptions(supabase: ServerSupabase) {
+  const { data, error } = await supabase
+    .from("assets")
+    .select("id, symbol, name, market, currency")
+    .eq("is_active", true)
+    .order("market")
+    .order("symbol")
+    .limit(2000);
+  if (error) throw error;
+  return data ?? [];
+}
+
 export async function getAsset(supabase: ServerSupabase, id: string): Promise<AssetWithQuote | null> {
   const { data, error } = await supabase
     .from("assets")

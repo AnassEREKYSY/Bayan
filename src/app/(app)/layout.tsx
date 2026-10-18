@@ -10,8 +10,11 @@ import { requireProfile, requireUser } from "@/server/auth";
 import { countUnreadNotifications } from "@/server/data/content";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
-  const [user, profile] = await Promise.all([requireUser(), requireProfile()]);
-  const unread = await countUnreadNotifications(await createClient());
+  const [user, profile, unread] = await Promise.all([
+    requireUser(),
+    requireProfile(),
+    createClient().then(countUnreadNotifications),
+  ]);
   const isAdmin = profile.role === "admin";
 
   return (

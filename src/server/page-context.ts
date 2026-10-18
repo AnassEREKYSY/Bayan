@@ -5,7 +5,7 @@ import { getLocale } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 
 import { requireProfile } from "./auth";
-import { listAssets } from "./data/market";
+import { listAssetOptions } from "./data/market";
 import { listPortfolios, pickPortfolio } from "./data/portfolio";
 
 /** Common data every signed-in page needs. */
@@ -17,16 +17,9 @@ export async function getPageContext() {
 /** Portfolios + the selected one (from ?p=) + assets for the transaction form. */
 export async function getPortfolioContext(requestedId?: string) {
   const ctx = await getPageContext();
-  const [portfolios, assets] = await Promise.all([listPortfolios(ctx.supabase), listAssets(ctx.supabase)]);
+  const [portfolios, assetOptions] = await Promise.all([listPortfolios(ctx.supabase), listAssetOptions(ctx.supabase)]);
   const portfolio = pickPortfolio(portfolios, requestedId);
-  const assetOptions = assets.map((a) => ({
-    id: a.id,
-    symbol: a.symbol,
-    name: a.name,
-    market: a.market,
-    currency: a.currency,
-  }));
-  return { ...ctx, portfolios, portfolio, assets, assetOptions };
+  return { ...ctx, portfolios, portfolio, assetOptions };
 }
 
 export function firstParam(value: string | string[] | undefined): string | undefined {

@@ -35,7 +35,8 @@
     "close": "Close",
     "save": "Save",
     "saving": "Saving…",
-    "create": "Create"
+    "create": "Create",
+    "cancel": "Cancel"
   },
   "forms": {
     "chooseAsset": "Choose an asset"
@@ -234,7 +235,11 @@
     "filter": "Filter by type",
     "all": "All",
     "emptyTitle": "No transactions",
-    "emptyText": "Your history will appear here."
+    "emptyText": "Your history will appear here.",
+    "deleteHint": "It disappears from your history, and your totals and gains are recalculated. This can't be undone.",
+    "yourOperations": "Your transactions",
+    "yourOperationsHint": "Edit or delete them here if you made a mistake.",
+    "editHint": "Change any field and save: your totals update right away."
   },
   "markets": {
     "noPrice": "No price yet",
