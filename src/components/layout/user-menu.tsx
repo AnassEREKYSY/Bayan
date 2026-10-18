@@ -28,7 +28,7 @@ export function UserMenu({ name, email }: { name: string; email: string }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        className="flex size-8 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-fg ring-offset-2 ring-offset-bg hover:ring-2 hover:ring-primary/30"
+        className="flex size-8 items-center justify-center rounded-full bg-navy text-xs font-bold text-white ring-offset-2 ring-offset-bg hover:ring-2 hover:ring-mint/60 dark:bg-primary-soft dark:text-primary"
         aria-label={t("account")}
       >
         {initials}

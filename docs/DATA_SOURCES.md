@@ -11,7 +11,7 @@ Vercel Cron / external scheduler
         ▼
   server/jobs/jobs.ts
    ├─ fx         → fx_rates            (open.er-api.com)
-   ├─ quotes     → asset_quotes + asset_prices (providers below, stalest assets first)
+   ├─ quotes     → asset_quotes + asset_prices (assets someone holds, follows or has an alert on; stalest first)
    ├─ news       → news_items + news_item_assets (RSS, matched to assets by keywords)
    ├─ summaries  → news_items.summary_fr / summary_en (AI, checked against the source)
    └─ alerts     → notifications (price alerts + event reminders)
@@ -19,15 +19,22 @@ Vercel Cron / external scheduler
 
 Every run is logged in `job_runs` (visible on the Admin page).
 
+On top of the schedule:
+
+- **Opening an asset page** refreshes that asset when its price is older than 6 hours (30 minutes for crypto), at most once every 30 minutes per asset. This is how assets nobody follows stay usable without spending the daily quota.
+- **Searching on the Markets page** also looks in Twelve Data's and CoinGecko's catalogues. "Add" stores the asset (checked again with the provider), fetches its price and a year of history, and opens it. Each user can add 25 new assets per day. Catalogue searches are cached for a day.
+
 ## Prices
 
 | Market | Provider | `provider_ref` format | Notes |
 | --- | --- | --- | --- |
 | Crypto | CoinGecko | coin id, e.g. `bitcoin` | Works without a key; a free demo key raises limits |
-| US / Europe / gold / silver | Twelve Data | `AAPL`, or `MC\|Euronext`, or `XAU/USD` | Free plan ≈ 8 requests/minute, 800/day. Bayan updates at most 8 assets per run, stalest first |
+| US / Europe / gold / silver | Twelve Data | `AAPL`, `MC\|Euronext`, `AAPL\|XNGS` (symbol + MIC) or `XAU/USD` | Free Basic plan: 8 credits/minute, 800/day. The scheduled run makes up to 4 rounds of 8, one minute apart (~3 minutes) |
 | Bourse de Casablanca | Your JSON feed (`CASABLANCA_FEED_URL`) | the ticker, e.g. `MSA` | See format below |
 
-On the first runs, Bayan also backfills one year of daily history for assets that have little or none (2 per run).
+On the first runs, Bayan also backfills one year of daily history for assets that have little or none (2 per round).
+
+Vercel's free plan runs the schedule once a day. To refresh more often, call `GET /api/cron?jobs=fx,quotes,alerts` with the header `Authorization: Bearer <CRON_SECRET>` from any free scheduler (for example cron-job.org), a few times a day.
 
 ### Casablanca feed format
 

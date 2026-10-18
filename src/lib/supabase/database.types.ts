@@ -53,6 +53,7 @@ export type Database = {
           provider_ref: string | null;
           keywords: string[];
           is_active: boolean;
+          refresh_attempted_at: string | null;
           created_at: string;
         };
         Insert: {
@@ -67,9 +68,16 @@ export type Database = {
           provider_ref?: string | null;
           keywords?: string[];
           is_active?: boolean;
+          refresh_attempted_at?: string | null;
         };
         Update: Partial<Database["public"]["Tables"]["assets"]["Insert"]>;
         Relationships: [];
+      };
+      asset_imports: {
+        Row: { id: number; user_id: string; asset_id: string; created_at: string };
+        Insert: { user_id: string; asset_id: string; created_at?: string };
+        Update: Record<string, never>;
+        Relationships: [Rel<"asset_id", "assets">];
       };
       asset_quotes: {
         Row: {
@@ -152,7 +160,7 @@ export type Database = {
       watchlist_items: {
         Row: { user_id: string; asset_id: string; created_at: string };
         Insert: { user_id?: string; asset_id: string };
-        Update: never;
+        Update: Record<string, never>;
         Relationships: [Rel<"asset_id", "assets">];
       };
       news_items: {
@@ -189,7 +197,7 @@ export type Database = {
       news_item_assets: {
         Row: { news_id: string; asset_id: string };
         Insert: { news_id: string; asset_id: string };
-        Update: never;
+        Update: Record<string, never>;
         Relationships: [Rel<"news_id", "news_items">, Rel<"asset_id", "assets">];
       };
       corporate_events: {

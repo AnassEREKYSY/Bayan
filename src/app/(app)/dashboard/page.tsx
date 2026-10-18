@@ -44,7 +44,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Se
     <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div>
         <p className="text-sm text-fg-muted">{greeting}</p>
-        <h1 className="mt-0.5 font-display text-[28px] leading-[1.15]">{t("title")}</h1>
+        <h1 className="mt-0.5 font-display text-[26px] leading-[1.2]">{t("title")}</h1>
       </div>
       <div className="flex flex-wrap items-center gap-2">
         <PortfolioSwitcher portfolios={ctx.portfolios} currentId={portfolio?.id} />
@@ -115,7 +115,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Se
           <div className="flex flex-wrap items-start justify-between gap-4 px-5 pt-5 sm:px-6 sm:pt-6">
             <div>
               <p className="text-sm font-medium text-fg-muted">{t("totalValue")}</p>
-              <p className="mt-1.5 font-display text-[40px] leading-none tabular sm:text-[48px]">
+              <p className="mt-1.5 font-display text-[38px] leading-none tracking-[-0.03em] tabular sm:text-[44px]">
                 <Money value={summary.marketValue} currency={base} locale={locale} />
               </p>
               <p className="mt-3 flex flex-wrap items-center gap-2 text-sm">

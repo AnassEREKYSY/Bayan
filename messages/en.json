@@ -105,7 +105,9 @@
     "oversell": "You can't sell more than you held on that date.",
     "duplicateName": "You already have a portfolio with this name.",
     "duplicateAsset": "This asset already exists on that market.",
-    "confirmationMismatch": "Type DELETE to confirm."
+    "confirmationMismatch": "Type DELETE to confirm.",
+    "importLimit": "You've added the maximum of 25 new assets today. Try again tomorrow.",
+    "providerUnavailable": "The market data source didn't answer. Please try again in a minute."
   },
   "success": {
     "checkInbox": "Check your inbox to confirm your email.",
@@ -244,7 +246,13 @@
     "searchPlaceholder": "Search by name or symbol",
     "noResults": "No asset found",
     "noResultsHint": "Try another name or symbol.",
-    "delayNote": "Stock prices may be delayed. Crypto prices are close to real time."
+    "delayNote": "Stock prices may be delayed. Crypto prices are close to real time.",
+    "elsewhere": "More on the markets",
+    "elsewhereHint": "Not in Bayan yet. Add one to see its price history, news and events; it then appears for everyone.",
+    "add": "Add",
+    "addNamed": "Add {name} to Bayan",
+    "adding": "Adding…",
+    "exploreHint": "Can't find it? Search by name or symbol: Bayan also looks across US and European stocks, ETFs and crypto."
   },
   "watchlist": {
     "add": "Watch",

@@ -3,78 +3,93 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ─── Design tokens ─────────────────────────────────────────────────────────
-   Cool porcelain neutrals and deep indigo ink. One strong colour — Majorelle
-   blue — carries actions and the portfolio line. Each market has its own
-   colour, used the same way everywhere (avatars, allocation, chips).
-   Gain/loss stay clear of the market colours so they never get confused. */
+   Navy and mint. Deep navy carries structure (sidebar, ink, hero panels);
+   mint is the single accent: actions, the portfolio line, active states.
+   Text in the accent colour uses a deeper teal so it stays readable.
+   Each market has its own colour, used the same way everywhere. */
 :root {
-  --bg: #f4f5f8;
+  --bg: #f3f6fa;
   --surface: #ffffff;
-  --surface-muted: #eef0f5;
-  --surface-sunken: #e7eaf1;
-  --border: #e3e6ee;
-  --border-strong: #cfd4e0;
-  --fg: #17203a;
-  --fg-muted: #586079;
-  --fg-subtle: #8b92a8;
+  --surface-muted: #eef2f7;
+  --surface-sunken: #e6ebf2;
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+  --fg: #0b1b33;
+  --fg-muted: #4a5a72;
+  --fg-subtle: #8191a7;
 
-  --primary: #4b45d6;
-  --primary-hover: #3d37bd;
-  --primary-fg: #ffffff;
-  --primary-soft: #ecebfc;
-  --primary-line: #4b45d6;
+  /* Accent as text/icons (AA on white) and as a fill (with dark text). */
+  --primary: #0a8a6e;
+  --primary-hover: #077560;
+  --primary-soft: #e0f6ef;
+  --mint: #1fcfa5;
+  --mint-hover: #15bb94;
+  --mint-fg: #04261f;
+  --chart-line: #10b48d;
 
-  --accent: #c98a0b;
-  --accent-soft: #fbf1db;
+  --navy: #0b1b33;
+  --navy-2: #12264a;
+  --navy-fg: #e8eef8;
+  --navy-muted: #9cadc7;
 
-  --gain: #12894a;
-  --gain-soft: #e3f4ea;
-  --loss: #d93a40;
-  --loss-soft: #fce8e8;
+  --accent: #b7791f;
+  --accent-soft: #fbf0dc;
 
-  --m-casablanca: #4b45d6;
-  --m-us: #d6456c;
-  --m-europe: #0b8c99;
-  --m-commodities: #c98a0b;
-  --m-crypto: #5d6a85;
+  --gain: #0e9f6e;
+  --gain-soft: #e1f5ec;
+  --loss: #e0424c;
+  --loss-soft: #fde8e9;
 
-  --ring: #4b45d6;
-  --shadow-pop: 0 1px 2px rgb(23 32 58 / 0.06), 0 12px 32px -8px rgb(23 32 58 / 0.16);
+  --m-casablanca: #e4572e;
+  --m-us: #2f7cf6;
+  --m-europe: #8b5cf6;
+  --m-commodities: #d9a400;
+  --m-crypto: #7c8ba3;
+
+  --ring: #10b48d;
+  --shadow-pop: 0 1px 2px rgb(11 27 51 / 0.06), 0 14px 36px -10px rgb(11 27 51 / 0.2);
   color-scheme: light;
 }
 
 .dark {
-  --bg: #0b1020;
-  --surface: #11172b;
-  --surface-muted: #182039;
-  --surface-sunken: #0e1426;
-  --border: #212a45;
-  --border-strong: #2e3858;
-  --fg: #e8ebf5;
-  --fg-muted: #a0a8c0;
-  --fg-subtle: #6f7894;
+  --bg: #071224;
+  --surface: #0c1a30;
+  --surface-muted: #12233d;
+  --surface-sunken: #091629;
+  --border: #1b2e4c;
+  --border-strong: #284066;
+  --fg: #e6edf7;
+  --fg-muted: #a0b1c9;
+  --fg-subtle: #6b7f9e;
 
-  --primary: #8a84ff;
-  --primary-hover: #a19cff;
-  --primary-fg: #0b1020;
-  --primary-soft: #1f2152;
-  --primary-line: #8a84ff;
+  --primary: #3ee0bb;
+  --primary-hover: #6aebcd;
+  --primary-soft: #0d3332;
+  --mint: #2dd4aa;
+  --mint-hover: #4fe0bc;
+  --mint-fg: #04261f;
+  --chart-line: #3ee0bb;
 
-  --accent: #f0b43c;
+  --navy: #050d1c;
+  --navy-2: #0c1a30;
+  --navy-fg: #e6edf7;
+  --navy-muted: #8fa1bd;
+
+  --accent: #f2b544;
   --accent-soft: #33280f;
 
-  --gain: #3ccf86;
-  --gain-soft: #10291e;
-  --loss: #ff6b70;
-  --loss-soft: #351a20;
+  --gain: #34d399;
+  --gain-soft: #0d2b22;
+  --loss: #ff6b72;
+  --loss-soft: #36181f;
 
-  --m-casablanca: #8a84ff;
-  --m-us: #ff7a9c;
-  --m-europe: #33c5d1;
-  --m-commodities: #f0b43c;
-  --m-crypto: #94a0bd;
+  --m-casablanca: #ff7a52;
+  --m-us: #5f9bff;
+  --m-europe: #a98bff;
+  --m-commodities: #f2c230;
+  --m-crypto: #9aa9c2;
 
-  --ring: #8a84ff;
+  --ring: #3ee0bb;
   --shadow-pop: 0 1px 2px rgb(0 0 0 / 0.4), 0 16px 40px -12px rgb(0 0 0 / 0.7);
   color-scheme: dark;
 }
@@ -91,8 +106,14 @@
   --color-fg-subtle: var(--fg-subtle);
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-hover);
-  --color-primary-fg: var(--primary-fg);
   --color-primary-soft: var(--primary-soft);
+  --color-mint: var(--mint);
+  --color-mint-hover: var(--mint-hover);
+  --color-mint-fg: var(--mint-fg);
+  --color-navy: var(--navy);
+  --color-navy-2: var(--navy-2);
+  --color-navy-fg: var(--navy-fg);
+  --color-navy-muted: var(--navy-muted);
   --color-accent: var(--accent);
   --color-accent-soft: var(--accent-soft);
   --color-gain: var(--gain);
@@ -101,8 +122,8 @@
   --color-loss-soft: var(--loss-soft);
   --color-ring: var(--ring);
 
-  --font-sans: "Instrument Sans Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-display: "Instrument Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Plus Jakarta Sans Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Plus Jakarta Sans Variable", ui-sans-serif, system-ui, sans-serif;
 
   /* Radius follows hierarchy: controls 8, panels 16, pills full. */
   --radius-sm: 6px;
@@ -126,7 +147,7 @@
     color: var(--fg);
     font-family: var(--font-sans);
     font-size: 15px;
-    line-height: 1.5;
+    line-height: 1.55;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -145,7 +166,7 @@
   h1,
   h2,
   h3 {
-    letter-spacing: -0.015em;
+    letter-spacing: -0.012em;
     text-wrap: balance;
   }
 }
@@ -154,12 +175,11 @@
   .tabular {
     font-variant-numeric: tabular-nums;
   }
-  /* Display type: the same family, tighter and slightly condensed. */
+  /* Display type: the same family, bold and slightly tightened. */
   .font-display {
     font-family: var(--font-display);
-    font-weight: 600;
-    font-stretch: 92%;
-    letter-spacing: -0.025em;
+    font-weight: 700;
+    letter-spacing: -0.022em;
   }
   .market-casablanca { --market: var(--m-casablanca); }
   .market-us { --market: var(--m-us); }

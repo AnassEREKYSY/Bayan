@@ -25,13 +25,16 @@ export interface HistoryPoint {
   close: number;
 }
 
-type Asset = Pick<Tables<"assets">, "id" | "symbol" | "market" | "provider_ref">;
+export type ProviderAsset = Pick<Tables<"assets">, "id" | "symbol" | "market" | "provider_ref">;
+type Asset = ProviderAsset;
 
 export interface MarketDataProvider {
   readonly name: string;
   supports(asset: Asset): boolean;
-  /** Max assets per run, to stay within free-tier limits. */
+  /** Max assets per request round, to stay within free-tier limits. */
   readonly batchSize: number;
+  /** Minimum pause between two rounds (per-minute limits), in ms. */
+  readonly roundPauseMs?: number;
   quotes(assets: Asset[]): Promise<QuoteResult[]>;
   history?(asset: Asset, days: number): Promise<HistoryPoint[]>;
 }
@@ -92,15 +95,18 @@ const twelveQuote = z.object({
 
 export function twelveData(apiKey: string): MarketDataProvider {
   const base = "https://api.twelvedata.com";
+  // provider_ref is "SYMBOL", "SYMBOL|Exchange name" or "SYMBOL|MIC" (e.g. MC|XPAR).
   const params = (a: Asset) => {
-    const [symbol, exchange] = refOf(a).split("|");
-    return `symbol=${encodeURIComponent(symbol ?? a.symbol)}${exchange ? `&exchange=${encodeURIComponent(exchange)}` : ""}`;
+    const [symbol, venue] = refOf(a).split("|");
+    const venueParam = !venue ? "" : /^[A-Z0-9]{4}$/.test(venue) ? `&mic_code=${venue}` : `&exchange=${encodeURIComponent(venue)}`;
+    return `symbol=${encodeURIComponent(symbol ?? a.symbol)}${venueParam}`;
   };
 
   return {
     name: "twelvedata",
-    // Free plan: 8 requests per minute. One request per asset.
+    // Free plan: 8 credits per minute, 800 per day. One credit per asset.
     batchSize: 8,
+    roundPauseMs: 61_000,
     supports: (a) => a.market === "us" || a.market === "europe" || a.market === "commodities",
     async quotes(assets) {
       const results = await Promise.allSettled(

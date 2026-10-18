@@ -45,7 +45,7 @@ export function PageHeader({
   return (
     <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div className="min-w-0">
-        <h1 className="font-display text-[28px] leading-[1.15] text-fg">{title}</h1>
+        <h1 className="font-display text-[26px] leading-[1.2] text-fg">{title}</h1>
         {description ? <p className="mt-1 max-w-2xl text-sm text-fg-muted">{description}</p> : null}
       </div>
       {actions ? <div className="flex flex-wrap items-center gap-2">{actions}</div> : null}

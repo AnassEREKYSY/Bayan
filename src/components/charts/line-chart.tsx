@@ -64,7 +64,7 @@ export function LineChart({ data, currency, height = 220, className, ariaLabel }
     return <div className={cn("flex items-center justify-center text-sm text-fg-subtle", className)} style={{ height }} />;
   }
 
-  const color = "var(--primary-line)";
+  const color = "var(--chart-line)";
   const active = hover != null ? data[hover] : data[data.length - 1];
   const activePoint = hover != null ? geometry.points[hover] : null;
 
@@ -131,7 +131,7 @@ export function LineChart({ data, currency, height = 220, className, ariaLabel }
       {activePoint ? (
         <span
           aria-hidden
-          className="pointer-events-none absolute size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-surface bg-[var(--primary-line)] shadow-[0_0_0_4px_color-mix(in_oklab,var(--primary-line)_22%,transparent)]"
+          className="pointer-events-none absolute size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-surface bg-[var(--chart-line)] shadow-[0_0_0_4px_color-mix(in_oklab,var(--chart-line)_25%,transparent)]"
           style={{ left: `${(activePoint[0] / W) * 100}%`, top: `calc(${activePoint[1]}px + 28px)` }}
         />
       ) : null}

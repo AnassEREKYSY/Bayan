@@ -38,7 +38,7 @@ export function AlertRowControls({ id, active, label }: { id: string; active: bo
         onClick={() => run(() => setAlertActive(id, !active))}
         className={cn(
           "relative h-6 w-10 rounded-full transition-colors disabled:opacity-60",
-          active ? "bg-primary" : "bg-border-strong",
+          active ? "bg-mint" : "bg-border-strong",
         )}
       >
         <span

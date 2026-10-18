@@ -74,7 +74,7 @@ export default async function AlertsPage() {
             <ul className="mt-3 divide-y divide-border border-t border-border">
               {notifications.map((n) => (
                 <li key={n.id} className="flex gap-3 px-5 py-3">
-                  <span className={cn("mt-1.5 size-2 shrink-0 rounded-full", n.read_at ? "bg-transparent" : "bg-primary")} aria-hidden />
+                  <span className={cn("mt-1.5 size-2 shrink-0 rounded-full", n.read_at ? "bg-transparent" : "bg-mint")} aria-hidden />
                   <div className="min-w-0 flex-1">
                     <p className={cn("text-sm", n.read_at ? "text-fg-muted" : "font-semibold text-fg")}>
                       {n.asset_id ? (

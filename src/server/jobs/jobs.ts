@@ -19,7 +19,12 @@ import { configuredProviders, fetchFxRates } from "./providers";
 export const jobNames = ["fx", "quotes", "news", "summaries", "alerts"] as const;
 export type JobName = (typeof jobNames)[number];
 
-type JobFn = (db: AdminSupabase) => Promise<Record<string, Json>>;
+interface JobContext {
+  /** Paced rounds allowed for rate-limited providers in this run. */
+  rounds: number;
+}
+
+type JobFn = (db: AdminSupabase, ctx: JobContext) => Promise<Record<string, Json>>;
 
 // ─── FX ─────────────────────────────────────────────────────────────────────
 const fxJob: JobFn = async (db) => {
@@ -33,75 +38,93 @@ const fxJob: JobFn = async (db) => {
 // ─── Quotes & price history ─────────────────────────────────────────────────
 const BACKFILL_PER_RUN = 2;
 const BACKFILL_DAYS = 365;
+/** Assets someone holds, follows or has an alert on. Refreshed first. */
+async function usedAssetIds(db: AdminSupabase): Promise<Set<string>> {
+  const [tx, watch, alerts] = await Promise.all([
+    db.from("transactions").select("asset_id").limit(50_000),
+    db.from("watchlist_items").select("asset_id").limit(50_000),
+    db.from("alert_rules").select("asset_id").eq("is_active", true).limit(50_000),
+  ]);
+  return new Set([...(tx.data ?? []), ...(watch.data ?? []), ...(alerts.data ?? [])].map((r) => r.asset_id));
+}
 
-const quotesJob: JobFn = async (db) => {
-  const { data: assets, error } = await db
-    .from("assets")
-    .select("id, symbol, market, provider_ref, quote:asset_quotes(updated_at)")
-    .eq("is_active", true);
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const quotesJob: JobFn = async (db, { rounds }) => {
+  const [{ data: assets, error }, used] = await Promise.all([
+    db.from("assets").select("id, symbol, market, provider_ref, quote:asset_quotes(updated_at)").eq("is_active", true),
+    usedAssetIds(db),
+  ]);
   if (error) throw error;
 
   type Row = { id: string; symbol: string; market: string; provider_ref: string | null; quote: { updated_at: string } | null };
   const rows = (assets ?? []) as unknown as Row[];
-  const stalest = (a: Row, b: Row) => (a.quote?.updated_at ?? "") .localeCompare(b.quote?.updated_at ?? "");
+  const stalest = (a: Row, b: Row) => (a.quote?.updated_at ?? "").localeCompare(b.quote?.updated_at ?? "");
+  const fresh = (r: Row) => r.quote != null && Date.now() - Date.parse(r.quote.updated_at) < 12 * 60 * 60_000;
 
   const report: Record<string, Json> = {};
   for (const provider of configuredProviders(serverEnv())) {
-    const batch = rows
-      .filter((a) => provider.supports(a as never))
-      .sort(stalest)
-      .slice(0, provider.batchSize) as never[];
-    if (batch.length === 0) continue;
+    const supported = rows.filter((a) => provider.supports(a as never));
+    // Providers that price everything in one request (the Casablanca feed)
+    // take every asset; rate-limited ones take what people use, stalest first.
+    const queue =
+      supported.length <= provider.batchSize
+        ? supported
+        : supported.filter((a) => used.has(a.id) && !fresh(a)).sort(stalest);
+    if (queue.length === 0) continue;
 
-    try {
-      const quotes = await provider.quotes(batch);
-      if (quotes.length > 0) {
-        const now = new Date().toISOString();
-        const { error: qErr } = await db.from("asset_quotes").upsert(
-          quotes.map((q) => ({
-            asset_id: q.assetId,
-            price: q.price,
-            previous_close: q.previousClose,
-            as_of: q.asOf,
-            source: q.source,
-            updated_at: now,
-          })),
-        );
-        if (qErr) throw qErr;
-
-        const { error: pErr } = await db.from("asset_prices").upsert(
-          quotes.map((q) => ({ asset_id: q.assetId, price_date: q.asOf.slice(0, 10), close: q.price })),
-        );
-        if (pErr) throw pErr;
+    let requested = 0;
+    let updated = 0;
+    const errors: string[] = [];
+    for (let round = 0; round < rounds && queue.length > 0; round++) {
+      if (round > 0) await sleep(provider.roundPauseMs ?? 0);
+      const batch = queue.splice(0, provider.batchSize) as never[];
+      requested += batch.length;
+      try {
+        const quotes = await provider.quotes(batch);
+        if (quotes.length > 0) {
+          const now = new Date().toISOString();
+          const { error: qErr } = await db.from("asset_quotes").upsert(
+            quotes.map((q) => ({
+              asset_id: q.assetId,
+              price: q.price,
+              previous_close: q.previousClose,
+              as_of: q.asOf,
+              source: q.source,
+              updated_at: now,
+            })),
+          );
+          if (qErr) throw qErr;
+          const { error: pErr } = await db
+            .from("asset_prices")
+            .upsert(quotes.map((q) => ({ asset_id: q.assetId, price_date: q.asOf.slice(0, 10), close: q.price })));
+          if (pErr) throw pErr;
+        }
+        updated += quotes.length;
+      } catch (e) {
+        errors.push(e instanceof Error ? e.message : "failed");
       }
-      report[provider.name] = { requested: batch.length, updated: quotes.length };
-    } catch (e) {
-      report[provider.name] = { error: e instanceof Error ? e.message : "failed" };
-    }
 
-    // Backfill a year of history for assets that have little or none.
-    if (provider.history) {
-      let done = 0;
-      for (const asset of batch as Row[]) {
-        if (done >= BACKFILL_PER_RUN) break;
-        const { count } = await db
-          .from("asset_prices")
-          .select("asset_id", { count: "exact", head: true })
-          .eq("asset_id", asset.id);
-        if ((count ?? 0) >= 30) continue;
-        try {
-          const points = await provider.history(asset as never, BACKFILL_DAYS);
-          if (points.length) {
-            await db
-              .from("asset_prices")
-              .upsert(points.map((p) => ({ asset_id: asset.id, price_date: p.date, close: p.close })));
+      // Backfill a year of history for assets that have little or none.
+      if (provider.history) {
+        let done = 0;
+        for (const asset of batch as Row[]) {
+          if (done >= BACKFILL_PER_RUN) break;
+          const { count } = await db.from("asset_prices").select("asset_id", { count: "exact", head: true }).eq("asset_id", asset.id);
+          if ((count ?? 0) >= 30) continue;
+          try {
+            const points = await provider.history(asset as never, BACKFILL_DAYS);
+            if (points.length) {
+              await db.from("asset_prices").upsert(points.map((p) => ({ asset_id: asset.id, price_date: p.date, close: p.close })));
+            }
+            done++;
+          } catch {
+            // History is best-effort; quotes above already succeeded.
           }
-          done++;
-        } catch {
-          // History is best-effort; quotes above already succeeded.
         }
       }
     }
+    report[provider.name] = { requested, updated, waiting: queue.length, ...(errors.length ? { errors } : {}) };
   }
   return report;
 };
@@ -375,12 +398,18 @@ const registry: Record<JobName, JobFn> = {
 };
 
 /** Runs jobs in order, logging each one to job_runs. One failure never stops the others. */
-export async function runJobs(db: AdminSupabase, names: readonly JobName[]) {
+/**
+ * `rounds` lets the scheduled run spend a few minutes pacing rate-limited
+ * providers (8 requests a minute on Twelve Data's free plan), while an admin
+ * clicking "refresh" gets a single quick round.
+ */
+export async function runJobs(db: AdminSupabase, names: readonly JobName[], { rounds = 1 }: { rounds?: number } = {}) {
+  const ctx: JobContext = { rounds: Math.min(Math.max(1, rounds), 4) };
   const results: Record<string, unknown> = {};
   for (const name of names) {
     const { data: run } = await db.from("job_runs").insert({ job: name }).select("id").single();
     try {
-      const detail = await registry[name](db);
+      const detail = await registry[name](db, ctx);
       results[name] = { ok: true, ...detail };
       if (run) await db.from("job_runs").update({ ok: true, finished_at: new Date().toISOString(), detail }).eq("id", run.id);
     } catch (e) {

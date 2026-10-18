@@ -28,6 +28,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "no valid jobs" }, { status: 400 });
   }
 
-  const results = await runJobs(createAdminClient(), requested);
+  // Up to 4 paced rounds: about 3 minutes, inside the 300 s limit below.
+  const results = await runJobs(createAdminClient(), requested, { rounds: 4 });
   return NextResponse.json({ ok: true, results });
 }

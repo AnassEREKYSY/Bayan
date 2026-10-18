@@ -74,7 +74,7 @@ export default async function TransactionsPage({ searchParams }: { searchParams:
             className={cn(
               "inline-flex h-8 shrink-0 items-center rounded-full px-3.5 text-[13px] font-semibold whitespace-nowrap transition-colors",
               typeFilter === type
-                ? "bg-fg text-bg"
+                ? "bg-navy text-white dark:bg-primary-soft dark:text-primary"
                 : "bg-surface text-fg-muted shadow-[inset_0_0_0_1px_var(--border-strong)] hover:text-fg",
             )}
           >

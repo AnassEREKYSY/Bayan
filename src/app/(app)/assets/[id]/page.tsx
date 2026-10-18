@@ -18,10 +18,12 @@ import { formatQuantity } from "@/domain/money";
 import { valuePortfolio } from "@/domain/portfolio";
 import { isoDay } from "@/lib/dates";
 import { routes } from "@/lib/routes";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { idSchema } from "@/lib/validation";
 import { listEvents, listNews, listWatchlistIds } from "@/server/data/content";
 import { getAsset, getFx, getPriceHistory, toAssetInfo } from "@/server/data/market";
 import { listPortfolios, listTransactions, toTransactionInput } from "@/server/data/portfolio";
+import { ensureFreshAsset } from "@/server/market/refresh";
 import { firstParam, getPageContext } from "@/server/page-context";
 
 type Params = Promise<{ id: string }>;
@@ -42,6 +44,8 @@ export default async function AssetPage({ params, searchParams }: { params: Para
   const range = parseRange(firstParam(sp.range));
 
   const { supabase, locale } = await getPageContext();
+  // Assets nobody follows aren't refreshed daily: fetch a new price on view.
+  await ensureFreshAsset(createAdminClient(), id);
   const asset = await getAsset(supabase, id);
   if (!asset) notFound();
 

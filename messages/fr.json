@@ -105,7 +105,9 @@
     "oversell": "Vous ne pouvez pas vendre plus que ce que vous déteniez à cette date.",
     "duplicateName": "Vous avez déjà un portefeuille portant ce nom.",
     "duplicateAsset": "Cet actif existe déjà sur ce marché.",
-    "confirmationMismatch": "Tapez SUPPRIMER pour confirmer."
+    "confirmationMismatch": "Tapez SUPPRIMER pour confirmer.",
+    "importLimit": "Vous avez ajouté le maximum de 25 nouveaux actifs aujourd'hui. Réessayez demain.",
+    "providerUnavailable": "La source de données n'a pas répondu. Réessayez dans une minute."
   },
   "success": {
     "checkInbox": "Consultez votre boîte mail pour confirmer votre adresse.",
@@ -244,7 +246,13 @@
     "searchPlaceholder": "Nom ou symbole",
     "noResults": "Aucun actif trouvé",
     "noResultsHint": "Essayez un autre nom ou symbole.",
-    "delayNote": "Les cours des actions peuvent être différés. Les cours des cryptos sont proches du temps réel."
+    "delayNote": "Les cours des actions peuvent être différés. Les cours des cryptos sont proches du temps réel.",
+    "elsewhere": "Ailleurs sur les marchés",
+    "elsewhereHint": "Pas encore dans Bayan. Ajoutez-en un pour voir son historique, son actualité et ses événements ; il apparaît ensuite pour tout le monde.",
+    "add": "Ajouter",
+    "addNamed": "Ajouter {name} à Bayan",
+    "adding": "Ajout…",
+    "exploreHint": "Vous ne le trouvez pas ? Cherchez par nom ou symbole : Bayan cherche aussi parmi les actions, ETF et cryptos américains et européens."
   },
   "watchlist": {
     "add": "Suivre",

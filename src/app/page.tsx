@@ -59,14 +59,14 @@ export default async function LandingPage() {
       <main>
         {/* Hero: the one bold moment — a Majorelle panel carrying the product. */}
         <section className="mx-auto max-w-6xl px-3 sm:px-5">
-          <div className="relative overflow-hidden rounded-[28px] bg-[#4b45d6] px-6 pt-12 pb-10 text-white sm:px-12 sm:pt-16 lg:pb-12 dark:bg-[#2c2896]">
-            <Lattice />
+          <div className="relative overflow-hidden rounded-[28px] bg-navy px-6 pt-12 pb-10 text-white sm:px-12 sm:pt-16 lg:pb-12 dark:ring-1 dark:ring-white/10">
+            <Lattice className="pointer-events-none absolute inset-0 h-full w-full text-mint opacity-[0.1]" />
             <div className="relative grid grid-cols-[minmax(0,1fr)] items-center gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]">
               <div>
-                <h1 className="font-display text-[42px] leading-[1.02] text-balance sm:text-[60px]">{t("title")}</h1>
-                <p className="mt-6 max-w-lg text-[17px] leading-relaxed text-white/80">{t("subtitle")}</p>
+                <h1 className="font-display text-[40px] leading-[1.05] tracking-[-0.03em] text-balance sm:text-[56px]">{t("title")}</h1>
+                <p className="mt-6 max-w-lg text-[17px] leading-relaxed text-navy-muted">{t("subtitle")}</p>
                 <div className="mt-8 flex flex-wrap gap-3">
-                  <Button asChild size="lg" className="bg-white text-[#2c2896] hover:bg-white/90">
+                  <Button asChild size="lg">
                     <Link href={startHref}>{t("cta")}</Link>
                   </Button>
                   <Button
@@ -78,7 +78,7 @@ export default async function LandingPage() {
                     <a href="#how">{t("ctaSecondary")}</a>
                   </Button>
                 </div>
-                <p className="mt-5 text-sm text-white/65">{t("free")}</p>
+                <p className="mt-5 text-sm text-navy-muted/80">{t("free")}</p>
               </div>
 
               <ProductPreview
@@ -129,7 +129,7 @@ export default async function LandingPage() {
             {(["one", "two", "three"] as const).map((step, i) => (
               <li key={step} className="relative">
                 {i < 2 ? <span aria-hidden className="absolute top-4 right-[-1.5rem] left-11 hidden h-px bg-border-strong md:block" /> : null}
-                <span className="relative flex size-8 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-fg ring-4 ring-bg">
+                <span className="relative flex size-8 items-center justify-center rounded-full bg-mint text-sm font-bold text-mint-fg ring-4 ring-bg">
                   {i + 1}
                 </span>
                 <h3 className="mt-5 text-[17px] font-semibold tracking-[-0.01em]">{t(`how.${step}.title`)}</h3>
@@ -206,12 +206,12 @@ function ProductPreview({
         <svg viewBox="0 0 300 72" className="mt-5 h-16 w-full" preserveAspectRatio="none">
           <defs>
             <linearGradient id="preview-fill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stopColor="var(--primary-line)" stopOpacity="0.18" />
-              <stop offset="1" stopColor="var(--primary-line)" stopOpacity="0" />
+              <stop offset="0" stopColor="var(--chart-line)" stopOpacity="0.2" />
+              <stop offset="1" stopColor="var(--chart-line)" stopOpacity="0" />
             </linearGradient>
           </defs>
           <path d={`${line} L300,72 L0,72Z`} fill="url(#preview-fill)" />
-          <path d={line} fill="none" stroke="var(--primary-line)" strokeWidth="2.25" vectorEffect="non-scaling-stroke" />
+          <path d={line} fill="none" stroke="var(--chart-line)" strokeWidth="2.25" vectorEffect="non-scaling-stroke" />
         </svg>
         <ul className="mt-4 divide-y divide-border">
           {rows.map((r) => (

@@ -1,4 +1,4 @@
-import "@fontsource-variable/instrument-sans/standard.css";
+import "@fontsource-variable/plus-jakarta-sans";
 import "./globals.css";
 
 import type { Metadata, Viewport } from "next";
@@ -23,8 +23,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f4f5f8" },
-    { media: "(prefers-color-scheme: dark)", color: "#0b1020" },
+    { media: "(prefers-color-scheme: light)", color: "#f3f6fa" },
+    { media: "(prefers-color-scheme: dark)", color: "#071224" },
   ],
   width: "device-width",
   initialScale: 1,
