@@ -1,0 +1,26 @@
+# dependencies
+node_modules/
+
+# next.js
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
+# env — never commit secrets
+.env
+.env.*
+!.env.example
+
+# vercel
+.vercel
+
+# supabase local
+supabase/.temp/
+supabase/.branches/
+
+# misc
+.DS_Store
+Thumbs.db
+coverage/
+npm-debug.log*
