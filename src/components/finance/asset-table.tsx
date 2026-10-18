@@ -27,14 +27,15 @@ export async function AssetTable({
         const prev = a.quote?.previous_close != null ? Number(a.quote.previous_close) : null;
         const change = price != null && prev ? (price - prev) / prev : null;
         return (
-          <li key={a.id} className="flex items-center gap-3 px-4 py-3 sm:px-5">
-            <Link href={routes.asset(a.id)} className="flex min-w-0 flex-1 items-center gap-3 hover:opacity-80">
+          <li key={a.id} className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-surface-muted/60 sm:px-5">
+            <Link href={routes.asset(a.id)} className="flex min-w-0 flex-1 items-center gap-3">
               <AssetAvatar symbol={a.symbol} market={a.market} />
               <div className="min-w-0">
                 <p className="truncate text-sm font-semibold">{a.name}</p>
-                <p className="truncate text-xs text-fg-subtle">
-                  {a.symbol} · {tEnum(`assetClass.${a.asset_class}` as never)}
-                  {a.exchange ? ` · ${a.exchange}` : ""}
+                <p className="flex items-center gap-2 truncate text-xs text-fg-subtle">
+                  <span className="font-semibold text-fg-muted">{a.symbol}</span>
+                  <span>{tEnum(`assetClass.${a.asset_class}` as never)}</span>
+                  {a.exchange ? <span className="hidden sm:inline">{a.exchange}</span> : null}
                 </p>
               </div>
             </Link>

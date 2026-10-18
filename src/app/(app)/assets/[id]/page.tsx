@@ -85,7 +85,7 @@ export default async function AssetPage({ params, searchParams }: { params: Para
         <div className="flex items-start gap-3">
           <AssetAvatar symbol={asset.symbol} market={asset.market} />
           <div>
-            <h1 className="font-display text-[26px] leading-tight font-medium">{asset.name}</h1>
+            <h1 className="font-display text-[26px] leading-tight">{asset.name}</h1>
             <div className="mt-1 flex flex-wrap items-center gap-2 text-sm text-fg-muted">
               <span className="font-semibold text-fg">{asset.symbol}</span>
               <Badge>{tEnum(`market.${asset.market}` as never)}</Badge>
@@ -116,7 +116,7 @@ export default async function AssetPage({ params, searchParams }: { params: Para
           <CardBody>
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
-                <p className="font-display text-[34px] leading-none font-medium tabular">
+                <p className="font-display text-[34px] leading-none tabular">
                   <Money value={price} currency={asset.currency} locale={locale} />
                 </p>
                 <div className="mt-2 flex items-center gap-2 text-sm">

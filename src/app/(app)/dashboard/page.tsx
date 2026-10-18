@@ -1,4 +1,4 @@
-import { ArrowRight, CalendarDays, ChartCandlestick, Info, Newspaper, Wallet } from "lucide-react";
+import { CalendarDays, ChartCandlestick, Info, Newspaper, Wallet } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
@@ -44,7 +44,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Se
     <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div>
         <p className="text-sm text-fg-muted">{greeting}</p>
-        <h1 className="font-display text-[28px] leading-tight font-medium">{t("title")}</h1>
+        <h1 className="mt-0.5 font-display text-[28px] leading-[1.15]">{t("title")}</h1>
       </div>
       <div className="flex flex-wrap items-center gap-2">
         <PortfolioSwitcher portfolios={ctx.portfolios} currentId={portfolio?.id} />
@@ -110,55 +110,52 @@ export default async function DashboardPage({ searchParams }: { searchParams: Se
     <>
       {header}
 
-      <section aria-label={t("overview")} className="grid gap-4 lg:grid-cols-3">
-        <Card className="lg:col-span-2">
-          <CardBody className="pb-3">
-            <div className="flex flex-wrap items-start justify-between gap-4">
-              <div>
-                <p className="text-sm text-fg-muted">{t("totalValue")}</p>
-                <p className="mt-1 font-display text-[40px] leading-none font-medium tracking-tight tabular">
-                  <Money value={summary.marketValue} currency={base} locale={locale} />
-                </p>
-                <p className="mt-2 flex items-center gap-2 text-sm">
-                  <Money value={summary.dayChange} currency={base} locale={locale} signed className={summary.dayChange >= 0 ? "text-gain" : "text-loss"} />
-                  <ChangeBadge value={summary.dayChangePct} locale={locale} />
-                  <span className="text-fg-subtle">{t("today")}</span>
-                </p>
-              </div>
-              <RangeTabs current={range} hrefFor={hrefFor} labels={{ "1m": t("range.1m"), "3m": t("range.3m"), "1y": t("range.1y") }} />
+      <section aria-label={t("overview")}>
+        <Card>
+          <div className="flex flex-wrap items-start justify-between gap-4 px-5 pt-5 sm:px-6 sm:pt-6">
+            <div>
+              <p className="text-sm font-medium text-fg-muted">{t("totalValue")}</p>
+              <p className="mt-1.5 font-display text-[40px] leading-none tabular sm:text-[48px]">
+                <Money value={summary.marketValue} currency={base} locale={locale} />
+              </p>
+              <p className="mt-3 flex flex-wrap items-center gap-2 text-sm">
+                <ChangeBadge value={summary.dayChangePct} locale={locale} />
+                <Money value={summary.dayChange} currency={base} locale={locale} signed className={summary.dayChange >= 0 ? "font-semibold text-gain" : "font-semibold text-loss"} />
+                <span className="text-fg-subtle">{t("today")}</span>
+              </p>
             </div>
-            <div className="mt-5">
-              {chartData.length > 1 ? (
-                <LineChart data={chartData} currency={base} ariaLabel={t("chartLabel")} height={200} />
-              ) : (
-                <p className="flex h-[200px] items-center justify-center rounded-md bg-surface-muted text-center text-sm text-fg-subtle">
-                  {t("chartEmpty")}
-                </p>
-              )}
-            </div>
-          </CardBody>
+            <RangeTabs current={range} hrefFor={hrefFor} labels={{ "1m": t("range.1m"), "3m": t("range.3m"), "1y": t("range.1y") }} />
+          </div>
+          <div className="px-5 pt-4 pb-5 sm:px-6">
+            {chartData.length > 1 ? (
+              <LineChart data={chartData} currency={base} ariaLabel={t("chartLabel")} height={220} />
+            ) : (
+              <p className="flex h-[220px] items-center justify-center rounded-lg bg-surface-muted text-center text-sm text-fg-subtle">
+                {t("chartEmpty")}
+              </p>
+            )}
+          </div>
+          <dl className="grid grid-cols-1 divide-y divide-border border-t border-border sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+            <Stat label={t("unrealized")}>
+              <Money value={summary.unrealizedPnl} currency={base} locale={locale} signed className={summary.unrealizedPnl >= 0 ? "text-gain" : "text-loss"} />
+              <Pct value={summary.unrealizedPct} locale={locale} className="text-sm font-medium" />
+            </Stat>
+            <Stat label={t("invested")}>
+              <Money value={summary.costBasis} currency={base} locale={locale} />
+              <span className="text-sm font-medium text-fg-subtle">{t("positions", { count: summary.positionsCount })}</span>
+            </Stat>
+            <Stat label={t("income")}>
+              <Money value={summary.dividends} currency={base} locale={locale} />
+              <span className="text-sm font-medium text-fg-subtle">
+                {t("realized")} <Money value={summary.realizedPnl} currency={base} locale={locale} signed />
+              </span>
+            </Stat>
+          </dl>
         </Card>
-
-        <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
-          <Stat label={t("unrealized")}>
-            <Money value={summary.unrealizedPnl} currency={base} locale={locale} signed className={summary.unrealizedPnl >= 0 ? "text-gain" : "text-loss"} />
-            <Pct value={summary.unrealizedPct} locale={locale} className="text-sm" />
-          </Stat>
-          <Stat label={t("invested")}>
-            <Money value={summary.costBasis} currency={base} locale={locale} />
-            <span className="text-sm text-fg-subtle">{t("positions", { count: summary.positionsCount })}</span>
-          </Stat>
-          <Stat label={t("income")}>
-            <Money value={summary.dividends} currency={base} locale={locale} />
-            <span className="text-sm text-fg-subtle">
-              {t("realized")} <Money value={summary.realizedPnl} currency={base} locale={locale} signed />
-            </span>
-          </Stat>
-        </div>
       </section>
 
       {summary.missingPrices > 0 ? (
-        <p className="mt-4 flex items-center gap-2 rounded-md bg-accent-soft px-3 py-2 text-sm text-fg">
+        <p className="mt-4 flex items-center gap-2 rounded-lg bg-accent-soft px-3.5 py-2.5 text-sm text-fg">
           <Info className="size-4 shrink-0 text-accent" />
           {t("missingPrices", { count: summary.missingPrices })}
         </p>
@@ -179,15 +176,15 @@ export default async function DashboardPage({ searchParams }: { searchParams: Se
             action={
               <Button variant="ghost" size="sm" asChild>
                 <Link href={routes.portfolio}>
-                  {t("seeAll")} <ArrowRight />
+                  {t("seeAll")}
                 </Link>
               </Button>
             }
           />
-          <ul className="divide-y divide-border px-5 pb-2">
+          <ul className="px-5 pt-2 pb-3">
             {movers.map((p) => (
               <li key={p.assetId}>
-                <Link href={routes.asset(p.assetId)} className="flex items-center gap-3 py-3 hover:opacity-80">
+                <Link href={routes.asset(p.assetId)} className="-mx-2 flex items-center gap-3 rounded-lg px-2 py-2.5 transition-colors hover:bg-surface-muted">
                   <AssetAvatar symbol={p.asset.symbol} market={p.asset.market} />
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-semibold">{p.asset.name}</p>
@@ -214,7 +211,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Se
             action={
               <Button variant="ghost" size="sm" asChild>
                 <Link href={routes.news}>
-                  {t("seeAll")} <ArrowRight />
+                  {t("seeAll")}
                 </Link>
               </Button>
             }
@@ -233,7 +230,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Se
             action={
               <Button variant="ghost" size="sm" asChild>
                 <Link href={routes.calendar}>
-                  {t("seeAll")} <ArrowRight />
+                  {t("seeAll")}
                 </Link>
               </Button>
             }
@@ -257,11 +254,9 @@ export default async function DashboardPage({ searchParams }: { searchParams: Se
 
 function Stat({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <Card>
-      <CardBody className="flex flex-col gap-1 py-4">
-        <p className="text-sm text-fg-muted">{label}</p>
-        <div className="flex flex-wrap items-baseline gap-x-2 text-xl font-semibold">{children}</div>
-      </CardBody>
-    </Card>
+    <div className="flex flex-col gap-1 px-5 py-4 sm:px-6">
+      <dt className="text-[13px] font-medium text-fg-muted">{label}</dt>
+      <dd className="flex flex-wrap items-baseline gap-x-2 text-lg font-semibold tracking-[-0.01em]">{children}</dd>
+    </div>
   );
 }

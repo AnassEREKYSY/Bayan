@@ -3,10 +3,10 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 const fieldBase =
-  "w-full rounded-md border border-border-strong bg-surface px-3 text-sm text-fg placeholder:text-fg-subtle transition-colors focus-visible:border-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/25 disabled:cursor-not-allowed disabled:opacity-60 aria-invalid:border-loss";
+  "w-full rounded-md border border-border-strong bg-surface px-3 text-base sm:text-sm text-fg placeholder:text-fg-subtle transition-colors focus-visible:border-ring focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-60 aria-invalid:border-loss";
 
 export function Input({ className, ...props }: React.InputHTMLAttributes<HTMLInputElement>) {
-  return <input className={cn(fieldBase, "h-10", className)} {...props} />;
+  return <input className={cn(fieldBase, "h-10 sm:h-9", className)} {...props} />;
 }
 
 export function Textarea({ className, ...props }: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
@@ -16,7 +16,7 @@ export function Textarea({ className, ...props }: React.TextareaHTMLAttributes<H
 export function Select({ className, children, ...props }: React.SelectHTMLAttributes<HTMLSelectElement>) {
   return (
     <div className="relative">
-      <select className={cn(fieldBase, "h-10 appearance-none pr-9", className)} {...props}>
+      <select className={cn(fieldBase, "h-10 sm:h-9 appearance-none pr-9", className)} {...props}>
         {children}
       </select>
       <svg

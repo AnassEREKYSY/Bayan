@@ -48,12 +48,14 @@ export default async function MarketsPage({ searchParams }: { searchParams: Sear
               href={href(m)}
               aria-current={market === m ? "true" : undefined}
               className={cn(
-                "shrink-0 rounded-full border px-3 py-1 text-sm font-medium whitespace-nowrap",
+                m && `market-${m}`,
+                "inline-flex h-8 shrink-0 items-center gap-2 rounded-full px-3.5 text-[13px] font-semibold whitespace-nowrap transition-colors",
                 market === m
-                  ? "border-primary bg-primary text-primary-fg"
-                  : "border-border-strong bg-surface text-fg-muted hover:text-fg",
+                  ? "bg-fg text-bg"
+                  : "bg-surface text-fg-muted shadow-[inset_0_0_0_1px_var(--border-strong)] hover:text-fg",
               )}
             >
+              {m ? <span aria-hidden className="size-2 rounded-full bg-[var(--market)]" /> : null}
               {m ? tEnum(m) : t("all")}
             </Link>
           ))}

@@ -43,7 +43,7 @@ export default async function AlertsPage() {
           {rules.length ? (
             <ul className="mt-3 divide-y divide-border border-t border-border">
               {rules.map((r) => {
-                const label = `${r.asset.symbol} · ${tType(r.type)}`;
+                const label = `${r.asset.symbol}, ${tType(r.type)}`;
                 const threshold =
                   r.type === "daily_move"
                     ? `± ${formatNumber(Number(r.threshold), locale)} %`
@@ -55,7 +55,7 @@ export default async function AlertsPage() {
                         {r.asset.symbol} <span className="font-normal text-fg-muted">{r.asset.name}</span>
                       </Link>
                       <p className="text-xs text-fg-subtle">
-                        {tType(r.type)} · <span className="font-semibold text-fg-muted tabular">{threshold}</span>
+                        {tType(r.type)} <span className="font-semibold text-fg-muted tabular">{threshold}</span>
                       </p>
                     </div>
                     <AlertRowControls id={r.id} active={r.is_active} label={label} />
@@ -74,7 +74,7 @@ export default async function AlertsPage() {
             <ul className="mt-3 divide-y divide-border border-t border-border">
               {notifications.map((n) => (
                 <li key={n.id} className="flex gap-3 px-5 py-3">
-                  <span className={cn("mt-1.5 size-2 shrink-0 rounded-full", n.read_at ? "bg-transparent" : "bg-accent")} aria-hidden />
+                  <span className={cn("mt-1.5 size-2 shrink-0 rounded-full", n.read_at ? "bg-transparent" : "bg-primary")} aria-hidden />
                   <div className="min-w-0 flex-1">
                     <p className={cn("text-sm", n.read_at ? "text-fg-muted" : "font-semibold text-fg")}>
                       {n.asset_id ? (
@@ -86,7 +86,8 @@ export default async function AlertsPage() {
                       )}
                     </p>
                     <p className="text-xs text-fg-subtle">
-                      {tKind(n.kind)} · {dateFmt.format(new Date(n.created_at))}
+                      <span className="font-medium text-fg-muted">{tKind(n.kind)}</span>
+                      <span className="ml-3">{dateFmt.format(new Date(n.created_at))}</span>
                     </p>
                   </div>
                 </li>

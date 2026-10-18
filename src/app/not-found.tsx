@@ -11,7 +11,7 @@ export default async function NotFound() {
     <main className="flex min-h-dvh flex-col items-center justify-center gap-6 px-6 text-center">
       <Logo />
       <div>
-        <p className="font-display text-[64px] leading-none font-medium text-fg-subtle">404</p>
+        <p className="font-display text-[64px] leading-none text-fg-subtle">404</p>
         <h1 className="mt-3 text-lg font-semibold">{t("title")}</h1>
         <p className="mt-1 text-sm text-fg-muted">{t("text")}</p>
       </div>

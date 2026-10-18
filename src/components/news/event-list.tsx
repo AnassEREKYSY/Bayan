@@ -14,14 +14,14 @@ export async function EventList({ events, locale }: { events: CorporateEvent[]; 
   const month = new Intl.DateTimeFormat(locale, { month: "short", timeZone: "UTC" });
 
   return (
-    <ul className="flex flex-col gap-3">
+    <ul className="flex flex-col gap-4">
       {events.map((e) => {
         const date = new Date(`${e.event_date}T00:00:00Z`);
         return (
           <li key={e.id} className="flex items-start gap-3">
-            <div className="flex w-11 shrink-0 flex-col items-center rounded-md border border-border bg-surface-muted py-1">
-              <span className="text-base leading-5 font-bold tabular">{day.format(date)}</span>
-              <span className="text-[10px] font-semibold text-fg-muted uppercase">{month.format(date)}</span>
+            <div className="flex w-11 shrink-0 flex-col items-center rounded-lg bg-surface-muted py-1.5">
+              <span className="text-[17px] leading-5 font-semibold tracking-[-0.02em] tabular">{day.format(date)}</span>
+              <span className="text-[11px] leading-4 font-medium text-fg-muted">{month.format(date).replace(".", "")}</span>
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">

@@ -19,7 +19,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Search
 
   return (
     <>
-      <h1 className="font-display text-[30px] leading-tight font-medium">{t("welcomeBack")}</h1>
+      <h1 className="font-display text-[30px] leading-[1.1]">{t("welcomeBack")}</h1>
       <p className="mt-2 mb-8 text-sm text-fg-muted">{t("signInText")}</p>
       <SignInForm next={next} linkError={sp.error === "link"} />
       <p className="mt-8 text-center text-sm text-fg-muted">

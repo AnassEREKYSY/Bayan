@@ -4,7 +4,7 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
 import { Allocation } from "@/components/charts/allocation";
-import { AssetAvatar, ChangeBadge, Money, Pct } from "@/components/finance/display";
+import { AssetAvatar, ChangeBadge, MarketTag, Money, Pct } from "@/components/finance/display";
 import { PortfolioManager } from "@/components/forms/portfolio-manager";
 import { PortfolioSwitcher } from "@/components/forms/portfolio-switcher";
 import { TransactionDialog } from "@/components/forms/transaction-dialog";
@@ -56,13 +56,13 @@ export default async function PortfolioPage({ searchParams }: { searchParams: Se
         }
       />
 
-      <dl className="mb-4 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-border bg-border lg:grid-cols-4">
+      <dl className="mb-4 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border lg:grid-cols-4">
         {[
           { label: t("value"), node: <Money value={summary.marketValue} currency={base} locale={locale} /> },
           {
             label: t("unrealized"),
             node: (
-              <span className="flex items-baseline gap-2">
+              <span className="flex flex-wrap items-baseline gap-x-2">
                 <Money value={summary.unrealizedPnl} currency={base} locale={locale} signed className={summary.unrealizedPnl >= 0 ? "text-gain" : "text-loss"} />
                 <Pct value={summary.unrealizedPct} locale={locale} className="text-sm" />
               </span>
@@ -71,9 +71,9 @@ export default async function PortfolioPage({ searchParams }: { searchParams: Se
           { label: t("realized"), node: <Money value={summary.realizedPnl} currency={base} locale={locale} signed /> },
           { label: t("dividends"), node: <Money value={summary.dividends} currency={base} locale={locale} /> },
         ].map((s) => (
-          <div key={s.label} className="bg-surface px-5 py-4">
-            <dt className="text-sm text-fg-muted">{s.label}</dt>
-            <dd className="mt-1 text-lg font-semibold">{s.node}</dd>
+          <div key={s.label} className="min-w-0 bg-surface px-4 py-4 sm:px-5">
+            <dt className="text-[13px] font-medium text-fg-muted">{s.label}</dt>
+            <dd className="mt-1 text-base font-semibold tracking-[-0.01em] sm:text-lg">{s.node}</dd>
           </div>
         ))}
       </dl>
@@ -106,8 +106,9 @@ export default async function PortfolioPage({ searchParams }: { searchParams: Se
                           <AssetAvatar symbol={p.asset.symbol} market={p.asset.market} />
                           <span className="min-w-0">
                             <span className="block truncate font-semibold">{p.asset.name}</span>
-                            <span className="text-xs text-fg-subtle">
-                              {p.asset.symbol} · {tEnum(`market.${p.asset.market}` as never)}
+                            <span className="flex items-center gap-2 text-xs text-fg-subtle">
+                              <span className="font-semibold text-fg-muted">{p.asset.symbol}</span>
+                              <MarketTag market={p.asset.market} label={tEnum(`market.${p.asset.market}` as never)} />
                             </span>
                           </span>
                         </Link>

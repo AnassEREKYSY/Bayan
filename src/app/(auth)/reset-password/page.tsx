@@ -14,7 +14,7 @@ export default async function ResetPasswordPage() {
   const t = await getTranslations("auth");
   return (
     <>
-      <h1 className="font-display text-[30px] leading-tight font-medium">{t("resetTitle")}</h1>
+      <h1 className="font-display text-[30px] leading-[1.1]">{t("resetTitle")}</h1>
       <p className="mt-2 mb-8 text-sm text-fg-muted">{t("resetText")}</p>
       <ResetPasswordForm />
     </>

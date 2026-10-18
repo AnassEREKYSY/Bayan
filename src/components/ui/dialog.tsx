@@ -25,17 +25,17 @@ export function DialogContent({
 }) {
   return (
     <DialogPrimitive.Portal>
-      <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-[rgb(14_19_22/0.45)]" />
+      <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-[rgb(11_16_32/0.5)] backdrop-blur-[2px]" />
       <DialogPrimitive.Content
         className={cn(
-          "fixed inset-x-0 bottom-0 z-50 max-h-[92dvh] overflow-y-auto rounded-t-xl border border-border bg-surface p-6 shadow-pop",
-          "sm:inset-auto sm:top-1/2 sm:left-1/2 sm:w-full sm:max-w-lg sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-xl",
+          "fixed inset-x-0 bottom-0 z-50 max-h-[92dvh] overflow-y-auto rounded-t-2xl border border-border bg-surface p-6 shadow-pop",
+          "sm:inset-auto sm:top-1/2 sm:left-1/2 sm:w-full sm:max-w-lg sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-2xl",
           className,
         )}
       >
         <div className="mb-5 flex items-start justify-between gap-4">
           <div>
-            <DialogPrimitive.Title className="text-lg font-semibold text-fg">{title}</DialogPrimitive.Title>
+            <DialogPrimitive.Title className="text-lg font-semibold tracking-[-0.015em] text-fg">{title}</DialogPrimitive.Title>
             {description ? (
               <DialogPrimitive.Description className="mt-1 text-sm text-fg-muted">
                 {description}

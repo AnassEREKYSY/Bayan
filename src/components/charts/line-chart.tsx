@@ -64,7 +64,7 @@ export function LineChart({ data, currency, height = 220, className, ariaLabel }
     return <div className={cn("flex items-center justify-center text-sm text-fg-subtle", className)} style={{ height }} />;
   }
 
-  const color = geometry.rising ? "var(--gain)" : "var(--loss)";
+  const color = "var(--primary-line)";
   const active = hover != null ? data[hover] : data[data.length - 1];
   const activePoint = hover != null ? geometry.points[hover] : null;
 
@@ -77,9 +77,9 @@ export function LineChart({ data, currency, height = 220, className, ariaLabel }
 
   return (
     <figure className={cn("relative", className)} aria-label={ariaLabel}>
-      <div className="mb-2 flex items-baseline justify-between gap-3 text-sm">
-        <span className="font-semibold text-fg tabular">{active ? formatValue(active.value) : ""}</span>
-        <span className="text-fg-subtle">{active ? formatDate(active.date) : ""}</span>
+      <div className="mb-2 flex h-5 items-baseline justify-between gap-3 text-[13px]">
+        <span className="font-semibold text-fg tabular">{hover != null && active ? formatValue(active.value) : ""}</span>
+        <span className="text-fg-subtle">{hover != null && active ? formatDate(active.date) : ""}</span>
       </div>
       <svg
         ref={svgRef}
@@ -95,13 +95,25 @@ export function LineChart({ data, currency, height = 220, className, ariaLabel }
       >
         <defs>
           <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={color} stopOpacity="0.18" />
+            <stop offset="0%" stopColor={color} stopOpacity="0.16" />
             <stop offset="100%" stopColor={color} stopOpacity="0" />
           </linearGradient>
         </defs>
-        <line x1="0" x2={W} y1={height - PAD_BOTTOM} y2={height - PAD_BOTTOM} stroke="var(--border)" />
+        {[0.25, 0.5, 0.75].map((f) => (
+          <line
+            key={f}
+            x1="0"
+            x2={W}
+            y1={PAD_TOP + f * (height - PAD_TOP - PAD_BOTTOM)}
+            y2={PAD_TOP + f * (height - PAD_TOP - PAD_BOTTOM)}
+            stroke="var(--border)"
+            strokeDasharray="2 4"
+            vectorEffect="non-scaling-stroke"
+          />
+        ))}
+        <line x1="0" x2={W} y1={height - PAD_BOTTOM} y2={height - PAD_BOTTOM} stroke="var(--border)" vectorEffect="non-scaling-stroke" />
         <path d={geometry.area} fill={`url(#${gradientId})`} />
-        <path d={geometry.line} fill="none" stroke={color} strokeWidth="2" vectorEffect="non-scaling-stroke" strokeLinejoin="round" />
+        <path d={geometry.line} fill="none" stroke={color} strokeWidth="2.25" vectorEffect="non-scaling-stroke" strokeLinejoin="round" strokeLinecap="round" />
         {activePoint ? (
           <>
             <line
@@ -113,10 +125,16 @@ export function LineChart({ data, currency, height = 220, className, ariaLabel }
               strokeDasharray="3 3"
               vectorEffect="non-scaling-stroke"
             />
-            <circle cx={activePoint[0]} cy={activePoint[1]} r="4" fill="var(--surface)" stroke={color} strokeWidth="2" vectorEffect="non-scaling-stroke" />
           </>
         ) : null}
       </svg>
+      {activePoint ? (
+        <span
+          aria-hidden
+          className="pointer-events-none absolute size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-surface bg-[var(--primary-line)] shadow-[0_0_0_4px_color-mix(in_oklab,var(--primary-line)_22%,transparent)]"
+          style={{ left: `${(activePoint[0] / W) * 100}%`, top: `calc(${activePoint[1]}px + 28px)` }}
+        />
+      ) : null}
       <div className="mt-1 flex justify-between text-xs text-fg-subtle">
         <span>{formatDate(data[0]!.date)}</span>
         <span>{formatDate(data[data.length - 1]!.date)}</span>

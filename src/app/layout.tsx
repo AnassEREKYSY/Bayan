@@ -1,5 +1,4 @@
-import "@fontsource-variable/manrope";
-import "@fontsource-variable/fraunces";
+import "@fontsource-variable/instrument-sans/standard.css";
 import "./globals.css";
 
 import type { Metadata, Viewport } from "next";
@@ -24,8 +23,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f7f5f0" },
-    { media: "(prefers-color-scheme: dark)", color: "#0e1316" },
+    { media: "(prefers-color-scheme: light)", color: "#f4f5f8" },
+    { media: "(prefers-color-scheme: dark)", color: "#0b1020" },
   ],
   width: "device-width",
   initialScale: 1,

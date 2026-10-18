@@ -20,7 +20,7 @@ export function RangeTabs({
   labels: Record<RangeKey, string>;
 }) {
   return (
-    <div className="inline-flex rounded-md bg-surface-muted p-0.5">
+    <div className="inline-flex rounded-lg bg-surface-muted p-[3px]">
       {(Object.keys(ranges) as RangeKey[]).map((r) => (
         <Link
           key={r}
@@ -28,8 +28,10 @@ export function RangeTabs({
           scroll={false}
           aria-current={r === current ? "true" : undefined}
           className={cn(
-            "rounded-[5px] px-2.5 py-1 text-xs font-semibold",
-            r === current ? "bg-surface text-fg shadow-card" : "text-fg-muted hover:text-fg",
+            "rounded-md px-3 py-1 text-[13px] font-semibold transition-colors",
+            r === current
+              ? "bg-surface text-fg shadow-[0_1px_2px_rgb(23_32_58/0.08),inset_0_0_0_1px_var(--border)]"
+              : "text-fg-muted hover:text-fg",
           )}
         >
           {labels[r]}

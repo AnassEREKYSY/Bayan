@@ -20,7 +20,7 @@ export function Badge({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 rounded-sm px-1.5 py-0.5 text-xs font-semibold whitespace-nowrap",
+        "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold whitespace-nowrap",
         toneClasses[tone],
         className,
       )}
@@ -44,8 +44,8 @@ export function PageHeader({
 }) {
   return (
     <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-      <div>
-        <h1 className="font-display text-[28px] leading-tight font-medium text-fg">{title}</h1>
+      <div className="min-w-0">
+        <h1 className="font-display text-[28px] leading-[1.15] text-fg">{title}</h1>
         {description ? <p className="mt-1 max-w-2xl text-sm text-fg-muted">{description}</p> : null}
       </div>
       {actions ? <div className="flex flex-wrap items-center gap-2">{actions}</div> : null}
@@ -69,7 +69,7 @@ export function EmptyState({
   return (
     <div className={cn("flex flex-col items-center px-6 py-12 text-center", className)}>
       {icon ? (
-        <div className="mb-4 flex size-11 items-center justify-center rounded-full bg-surface-muted text-fg-muted [&_svg]:size-5">
+        <div className="mb-4 flex size-11 items-center justify-center rounded-xl bg-primary-soft text-primary [&_svg]:size-5">
           {icon}
         </div>
       ) : null}

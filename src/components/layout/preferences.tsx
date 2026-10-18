@@ -55,7 +55,7 @@ export function LocaleSwitcher() {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="sm" aria-label={t("language")} disabled={pending} className="gap-1.5 px-2.5">
           <Languages />
-          <span className="text-xs font-bold uppercase">{current}</span>
+          <span className="text-[13px] font-semibold">{current.toUpperCase()}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>

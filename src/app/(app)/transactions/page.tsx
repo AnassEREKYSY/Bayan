@@ -72,10 +72,10 @@ export default async function TransactionsPage({ searchParams }: { searchParams:
             href={filterHref(type)}
             aria-current={typeFilter === type ? "true" : undefined}
             className={cn(
-              "rounded-full border px-3 py-1 text-sm font-medium",
+              "inline-flex h-8 shrink-0 items-center rounded-full px-3.5 text-[13px] font-semibold whitespace-nowrap transition-colors",
               typeFilter === type
-                ? "border-primary bg-primary text-primary-fg"
-                : "border-border-strong bg-surface text-fg-muted hover:text-fg",
+                ? "bg-fg text-bg"
+                : "bg-surface text-fg-muted shadow-[inset_0_0_0_1px_var(--border-strong)] hover:text-fg",
             )}
           >
             {type ? tType(type) : t("all")}
@@ -116,15 +116,14 @@ export default async function TransactionsPage({ searchParams }: { searchParams:
                             </Link>
                             <Badge tone={tone[tx.type]}>{tType(tx.type)}</Badge>
                           </div>
-                          <p className="text-xs text-fg-subtle tabular">
-                            {dayFmt.format(new Date(tx.executed_at))}
+                          <p className="flex flex-wrap gap-x-3 text-xs text-fg-subtle tabular">
+                            <span>{dayFmt.format(new Date(tx.executed_at))}</span>
                             {isTrade ? (
-                              <>
-                                {" · "}
+                              <span>
                                 {formatQuantity(Number(tx.quantity), locale)} × <Money value={Number(tx.price)} currency={tx.currency} locale={locale} />
-                              </>
+                              </span>
                             ) : null}
-                            {tx.note ? ` · ${tx.note}` : null}
+                            {tx.note ? <span className="truncate italic">{tx.note}</span> : null}
                           </p>
                         </div>
                         <Money

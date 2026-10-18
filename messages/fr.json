@@ -8,7 +8,10 @@
     "dark": "Sombre",
     "system": "Système",
     "language": "Langue",
-    "locale": { "en": "English", "fr": "Français" }
+    "locale": {
+      "en": "English",
+      "fr": "Français"
+    }
   },
   "nav": {
     "label": "Navigation principale",
@@ -133,7 +136,11 @@
     "overview": "Résumé du portefeuille",
     "totalValue": "Valeur totale",
     "today": "aujourd'hui",
-    "range": { "1m": "1M", "3m": "3M", "1y": "1A" },
+    "range": {
+      "1m": "1M",
+      "3m": "3M",
+      "1y": "1A"
+    },
     "chartLabel": "Évolution de la valeur du portefeuille",
     "chartEmpty": "L'historique s'affiche dès que les cours quotidiens sont collectés.",
     "unrealized": "Plus-value latente",
@@ -268,13 +275,22 @@
     "notifications": "Notifications",
     "notificationsHint": "{count, plural, =0 {Tout est lu} one {# non lue} other {# non lues}}",
     "noNotifications": "Aucune notification",
-    "kind": { "alert": "Alerte de cours", "event": "Rappel", "news": "Actualité", "system": "Bayan" }
+    "kind": {
+      "alert": "Alerte de cours",
+      "event": "Rappel",
+      "news": "Actualité",
+      "system": "Bayan"
+    }
   },
   "asset": {
     "addTransaction": "Ajouter une opération",
     "asOf": "au {date, date, medium} à {date, time, short}",
     "noPrice": "Pas encore de cours",
-    "range": { "1m": "1M", "3m": "3M", "1y": "1A" },
+    "range": {
+      "1m": "1M",
+      "3m": "3M",
+      "1y": "1A"
+    },
     "chartLabel": "Historique du cours de {symbol}",
     "noHistory": "L'historique apparaîtra après les premières mises à jour quotidiennes.",
     "yourPosition": "Votre position",
@@ -395,7 +411,6 @@
     "openApp": "Ouvrir Bayan",
     "signIn": "Se connecter",
     "start": "Commencer",
-    "eyebrow": "Casablanca · Wall Street · Paris · Or · Crypto",
     "title": "Tous vos placements, enfin expliqués.",
     "subtitle": "Bayan réunit vos actions marocaines, vos ETF étrangers, votre or et vos cryptos dans un seul portefeuille, dans une seule devise — et vous explique simplement ce qui leur est arrivé aujourd'hui.",
     "cta": "Créer mon compte gratuit",
@@ -408,7 +423,7 @@
       "newsText": "Chiffre d'affaires semestriel en hausse de 12 %. Le dividende annoncé reste inchangé.",
       "summary": "Résumé en mots simples"
     },
-    "featuresTitle": "Tout ce qu'il faut pour suivre votre argent — rien de superflu.",
+    "featuresTitle": "Tout ce qu'il faut pour suivre votre argent, rien de plus.",
     "features": {
       "oneView": {
         "title": "Un portefeuille, tous les marchés",
@@ -429,9 +444,18 @@
     },
     "howTitle": "Opérationnel en trois étapes",
     "how": {
-      "one": { "title": "Créez votre compte", "text": "Choisissez votre langue et la devise dans laquelle vous raisonnez." },
-      "two": { "title": "Ajoutez ce que vous détenez", "text": "Saisissez vos achats une fois. Bayan tient à jour les cours, les plus-values et les dividendes." },
-      "three": { "title": "Un coup d'œil chaque soir", "text": "Voyez votre journée en un instant et ne lisez que l'actualité qui vous concerne." }
+      "one": {
+        "title": "Créez votre compte",
+        "text": "Choisissez votre langue et la devise dans laquelle vous raisonnez."
+      },
+      "two": {
+        "title": "Ajoutez ce que vous détenez",
+        "text": "Saisissez vos achats une fois. Bayan tient à jour les cours, les plus-values et les dividendes."
+      },
+      "three": {
+        "title": "Un coup d'œil chaque soir",
+        "text": "Voyez votre journée en un instant et ne lisez que l'actualité qui vous concerne."
+      }
     },
     "marketsLabel": "Marchés couverts",
     "markets": {

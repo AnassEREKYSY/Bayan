@@ -8,7 +8,10 @@
     "dark": "Dark",
     "system": "System",
     "language": "Language",
-    "locale": { "en": "English", "fr": "Français" }
+    "locale": {
+      "en": "English",
+      "fr": "Français"
+    }
   },
   "nav": {
     "label": "Main navigation",
@@ -133,7 +136,11 @@
     "overview": "Portfolio summary",
     "totalValue": "Total value",
     "today": "today",
-    "range": { "1m": "1M", "3m": "3M", "1y": "1Y" },
+    "range": {
+      "1m": "1M",
+      "3m": "3M",
+      "1y": "1Y"
+    },
     "chartLabel": "Portfolio value over time",
     "chartEmpty": "The history appears as soon as daily prices are collected.",
     "unrealized": "Unrealised gain",
@@ -268,13 +275,22 @@
     "notifications": "Notifications",
     "notificationsHint": "{count, plural, =0 {All caught up} one {# unread} other {# unread}}",
     "noNotifications": "No notifications yet",
-    "kind": { "alert": "Price alert", "event": "Reminder", "news": "News", "system": "Bayan" }
+    "kind": {
+      "alert": "Price alert",
+      "event": "Reminder",
+      "news": "News",
+      "system": "Bayan"
+    }
   },
   "asset": {
     "addTransaction": "Add transaction",
     "asOf": "as of {date, date, medium} {date, time, short}",
     "noPrice": "No price yet",
-    "range": { "1m": "1M", "3m": "3M", "1y": "1Y" },
+    "range": {
+      "1m": "1M",
+      "3m": "3M",
+      "1y": "1Y"
+    },
     "chartLabel": "{symbol} price history",
     "noHistory": "Price history will appear after the first daily updates.",
     "yourPosition": "Your position",
@@ -395,7 +411,6 @@
     "openApp": "Open Bayan",
     "signIn": "Sign in",
     "start": "Get started",
-    "eyebrow": "Casablanca · Wall Street · Paris · Gold · Crypto",
     "title": "All your investments, finally explained.",
     "subtitle": "Bayan brings your Moroccan shares, foreign ETFs, gold and crypto into one portfolio, in one currency — and tells you in plain words what happened to them today.",
     "cta": "Create my free account",
@@ -408,7 +423,7 @@
       "newsText": "Half-year revenue up 12 %. No change to the announced dividend.",
       "summary": "Summary in plain words"
     },
-    "featuresTitle": "Everything you need to follow your money — nothing you don't.",
+    "featuresTitle": "Everything you need to follow your money, nothing more.",
     "features": {
       "oneView": {
         "title": "One portfolio, every market",
@@ -429,9 +444,18 @@
     },
     "howTitle": "Up and running in three steps",
     "how": {
-      "one": { "title": "Create your account", "text": "Choose your language and the currency you think in." },
-      "two": { "title": "Add what you own", "text": "Enter your purchases once. Bayan keeps prices, gains and dividends up to date." },
-      "three": { "title": "Check in each evening", "text": "See your day at a glance and read only the news that concerns you." }
+      "one": {
+        "title": "Create your account",
+        "text": "Choose your language and the currency you think in."
+      },
+      "two": {
+        "title": "Add what you own",
+        "text": "Enter your purchases once. Bayan keeps prices, gains and dividends up to date."
+      },
+      "three": {
+        "title": "Check in each evening",
+        "text": "See your day at a glance and read only the news that concerns you."
+      }
     },
     "marketsLabel": "Markets covered",
     "markets": {

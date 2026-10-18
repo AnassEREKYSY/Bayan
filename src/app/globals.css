@@ -3,55 +3,79 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ─── Design tokens ─────────────────────────────────────────────────────────
-   Warm paper neutrals, a deep petrol primary, a brass accent used sparingly,
-   and muted gain/loss colours that stay readable in both themes. */
+   Cool porcelain neutrals and deep indigo ink. One strong colour — Majorelle
+   blue — carries actions and the portfolio line. Each market has its own
+   colour, used the same way everywhere (avatars, allocation, chips).
+   Gain/loss stay clear of the market colours so they never get confused. */
 :root {
-  --bg: #f7f5f0;
+  --bg: #f4f5f8;
   --surface: #ffffff;
-  --surface-muted: #f0ede6;
-  --border: #e4dfd5;
-  --border-strong: #d3cdc0;
-  --fg: #1a2330;
-  --fg-muted: #5c6573;
-  --fg-subtle: #8a919b;
-  --primary: #1d4f5e;
-  --primary-hover: #173f4b;
+  --surface-muted: #eef0f5;
+  --surface-sunken: #e7eaf1;
+  --border: #e3e6ee;
+  --border-strong: #cfd4e0;
+  --fg: #17203a;
+  --fg-muted: #586079;
+  --fg-subtle: #8b92a8;
+
+  --primary: #4b45d6;
+  --primary-hover: #3d37bd;
   --primary-fg: #ffffff;
-  --primary-soft: #e3eef0;
-  --accent: #b9822a;
-  --accent-soft: #f6ecd9;
-  --gain: #2c7a55;
-  --gain-soft: #e2f1e8;
-  --loss: #b0443a;
-  --loss-soft: #f7e3e0;
-  --ring: #1d4f5e;
-  --shadow: 0 1px 2px rgb(26 35 48 / 0.05), 0 1px 1px rgb(26 35 48 / 0.03);
-  --shadow-lg: 0 12px 32px -12px rgb(26 35 48 / 0.18);
+  --primary-soft: #ecebfc;
+  --primary-line: #4b45d6;
+
+  --accent: #c98a0b;
+  --accent-soft: #fbf1db;
+
+  --gain: #12894a;
+  --gain-soft: #e3f4ea;
+  --loss: #d93a40;
+  --loss-soft: #fce8e8;
+
+  --m-casablanca: #4b45d6;
+  --m-us: #d6456c;
+  --m-europe: #0b8c99;
+  --m-commodities: #c98a0b;
+  --m-crypto: #5d6a85;
+
+  --ring: #4b45d6;
+  --shadow-pop: 0 1px 2px rgb(23 32 58 / 0.06), 0 12px 32px -8px rgb(23 32 58 / 0.16);
   color-scheme: light;
 }
 
 .dark {
-  --bg: #0e1316;
-  --surface: #151c20;
-  --surface-muted: #1b2429;
-  --border: #263239;
-  --border-strong: #33424a;
-  --fg: #e9e6df;
-  --fg-muted: #a2aab1;
-  --fg-subtle: #737d85;
-  --primary: #7db8c6;
-  --primary-hover: #95c7d3;
-  --primary-fg: #0e1316;
-  --primary-soft: #1a2d33;
-  --accent: #ddaa55;
-  --accent-soft: #2e2516;
-  --gain: #63be8f;
-  --gain-soft: #15291f;
-  --loss: #e58377;
-  --loss-soft: #33191a;
-  --ring: #7db8c6;
-  --shadow: 0 1px 2px rgb(0 0 0 / 0.3);
-  --shadow-lg: 0 16px 40px -16px rgb(0 0 0 / 0.6);
+  --bg: #0b1020;
+  --surface: #11172b;
+  --surface-muted: #182039;
+  --surface-sunken: #0e1426;
+  --border: #212a45;
+  --border-strong: #2e3858;
+  --fg: #e8ebf5;
+  --fg-muted: #a0a8c0;
+  --fg-subtle: #6f7894;
+
+  --primary: #8a84ff;
+  --primary-hover: #a19cff;
+  --primary-fg: #0b1020;
+  --primary-soft: #1f2152;
+  --primary-line: #8a84ff;
+
+  --accent: #f0b43c;
+  --accent-soft: #33280f;
+
+  --gain: #3ccf86;
+  --gain-soft: #10291e;
+  --loss: #ff6b70;
+  --loss-soft: #351a20;
+
+  --m-casablanca: #8a84ff;
+  --m-us: #ff7a9c;
+  --m-europe: #33c5d1;
+  --m-commodities: #f0b43c;
+  --m-crypto: #94a0bd;
+
+  --ring: #8a84ff;
+  --shadow-pop: 0 1px 2px rgb(0 0 0 / 0.4), 0 16px 40px -12px rgb(0 0 0 / 0.7);
   color-scheme: dark;
 }
 
@@ -59,6 +83,7 @@
   --color-bg: var(--bg);
   --color-surface: var(--surface);
   --color-surface-muted: var(--surface-muted);
+  --color-surface-sunken: var(--surface-sunken);
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
   --color-fg: var(--fg);
@@ -76,16 +101,18 @@
   --color-loss-soft: var(--loss-soft);
   --color-ring: var(--ring);
 
-  --font-sans: "Manrope Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-display: "Fraunces Variable", ui-serif, Georgia, serif;
+  --font-sans: "Instrument Sans Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Instrument Sans Variable", ui-sans-serif, system-ui, sans-serif;
 
+  /* Radius follows hierarchy: controls 8, panels 16, pills full. */
   --radius-sm: 6px;
   --radius-md: 8px;
   --radius-lg: 12px;
   --radius-xl: 16px;
+  --radius-2xl: 20px;
 
-  --shadow-card: var(--shadow);
-  --shadow-pop: var(--shadow-lg);
+  --shadow-card: none;
+  --shadow-pop: var(--shadow-pop);
 }
 
 @layer base {
@@ -98,8 +125,10 @@
     background-color: var(--bg);
     color: var(--fg);
     font-family: var(--font-sans);
-    font-feature-settings: "ss01", "cv11";
+    font-size: 15px;
+    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   ::selection {
@@ -110,13 +139,14 @@
   :focus-visible {
     outline: 2px solid var(--ring);
     outline-offset: 2px;
-    border-radius: 4px;
+    border-radius: 6px;
   }
 
   h1,
   h2,
   h3 {
-    letter-spacing: -0.01em;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
   }
 }
 
@@ -124,10 +154,18 @@
   .tabular {
     font-variant-numeric: tabular-nums;
   }
+  /* Display type: the same family, tighter and slightly condensed. */
   .font-display {
     font-family: var(--font-display);
-    font-optical-sizing: auto;
+    font-weight: 600;
+    font-stretch: 92%;
+    letter-spacing: -0.025em;
   }
+  .market-casablanca { --market: var(--m-casablanca); }
+  .market-us { --market: var(--m-us); }
+  .market-europe { --market: var(--m-europe); }
+  .market-commodities { --market: var(--m-commodities); }
+  .market-crypto { --market: var(--m-crypto); }
 }
 
 @media (prefers-reduced-motion: reduce) {

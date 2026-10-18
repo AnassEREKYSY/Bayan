@@ -49,16 +49,16 @@ function NavLinks({ isAdmin, unread, onNavigate }: { isAdmin: boolean; unread: n
         onClick={onNavigate}
         aria-current={isActive(href) ? "page" : undefined}
         className={cn(
-          "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+          "flex h-9 items-center gap-3 rounded-lg px-2.5 text-[14px] transition-colors",
           isActive(href)
-            ? "bg-surface text-fg shadow-card ring-1 ring-border"
-            : "text-fg-muted hover:bg-surface-muted hover:text-fg",
+            ? "bg-primary-soft font-semibold text-primary"
+            : "font-medium text-fg-muted hover:bg-surface-muted hover:text-fg",
         )}
       >
-        <Icon className={cn("size-[18px]", isActive(href) ? "text-primary" : "text-fg-subtle")} />
+        <Icon className={cn("size-[18px]", isActive(href) ? "text-primary" : "text-fg-subtle")} strokeWidth={isActive(href) ? 2.2 : 1.8} />
         <span className="flex-1">{t(key)}</span>
         {badge ? (
-          <span className="rounded-full bg-accent px-1.5 text-[11px] leading-[18px] font-bold text-white dark:text-bg">
+          <span className="min-w-5 rounded-full bg-primary px-1.5 text-center text-[11px] leading-5 font-semibold text-primary-fg tabular">
             {badge > 99 ? "99+" : badge}
           </span>
         ) : null}
@@ -71,7 +71,7 @@ function NavLinks({ isAdmin, unread, onNavigate }: { isAdmin: boolean; unread: n
       <ul className="flex flex-col gap-0.5">
         {mainItems.map(({ href, key, icon }) => item(href, key, icon, key === "alerts" ? unread : undefined))}
       </ul>
-      <ul className="mt-auto flex flex-col gap-0.5 border-t border-border pt-3">
+      <ul className="mt-auto flex flex-col gap-0.5 border-t border-border pt-4">
         {item(routes.settings, "settings", Settings)}
         {isAdmin ? item(routes.admin, "admin", ShieldCheck) : null}
       </ul>
@@ -81,8 +81,8 @@ function NavLinks({ isAdmin, unread, onNavigate }: { isAdmin: boolean; unread: n
 
 export function Sidebar({ isAdmin, unread }: { isAdmin: boolean; unread: number }) {
   return (
-    <aside className="sticky top-0 hidden h-dvh w-60 shrink-0 flex-col border-r border-border bg-bg px-3 py-5 lg:flex">
-      <Link href={routes.dashboard} className="mb-7 px-3">
+    <aside className="sticky top-0 hidden h-dvh w-60 shrink-0 flex-col border-r border-border bg-surface px-3 pt-5 pb-4 lg:flex">
+      <Link href={routes.dashboard} className="mb-8 px-2.5">
         <Logo />
       </Link>
       <NavLinks isAdmin={isAdmin} unread={unread} />
@@ -101,14 +101,14 @@ export function MobileNav({ isAdmin, unread }: { isAdmin: boolean; unread: numbe
         aria-label={t("open")}
       >
         <Menu className="size-5" />
-        {unread ? <span className="absolute top-1.5 right-1.5 size-2 rounded-full bg-accent" /> : null}
+        {unread ? <span className="absolute top-1.5 right-1.5 size-2 rounded-full bg-primary ring-2 ring-bg" /> : null}
       </DialogPrimitive.Trigger>
       <DialogPrimitive.Portal>
-        <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-[rgb(14_19_22/0.45)] lg:hidden" />
-        <DialogPrimitive.Content className="fixed inset-y-0 left-0 z-50 flex w-72 max-w-[85vw] flex-col bg-bg px-3 py-5 shadow-pop lg:hidden">
+        <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-[rgb(11_16_32/0.5)] backdrop-blur-[2px] lg:hidden" />
+        <DialogPrimitive.Content className="fixed inset-y-0 left-0 z-50 flex w-72 max-w-[85vw] flex-col bg-surface px-3 pt-5 pb-4 shadow-pop lg:hidden">
           <DialogPrimitive.Title className="sr-only">{t("label")}</DialogPrimitive.Title>
           <DialogPrimitive.Description className="sr-only">{t("label")}</DialogPrimitive.Description>
-          <div className="mb-7 flex items-center justify-between px-3">
+          <div className="mb-8 flex items-center justify-between px-2.5">
             <Logo />
             <DialogPrimitive.Close className="rounded-md p-1.5 text-fg-muted hover:bg-surface-muted" aria-label={t("close")}>
               <X className="size-5" />

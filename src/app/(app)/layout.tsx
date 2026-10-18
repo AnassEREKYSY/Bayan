@@ -18,7 +18,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     <div className="flex min-h-dvh">
       <Sidebar isAdmin={isAdmin} unread={unread} />
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-border bg-bg/90 px-4 backdrop-blur sm:px-6 lg:px-10">
+        <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-border bg-bg/85 px-4 backdrop-blur-md sm:px-6 lg:static lg:border-transparent lg:bg-transparent lg:px-10 lg:backdrop-blur-none">
           <MobileNav isAdmin={isAdmin} unread={unread} />
           <Link href={routes.dashboard} className="lg:hidden" aria-label="Bayan">
             <LogoMark className="size-7" />
@@ -31,7 +31,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
             </div>
           </div>
         </header>
-        <main id="main" className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6 lg:px-10 lg:py-8">
+        <main id="main" className="mx-auto w-full max-w-[1180px] flex-1 px-4 pt-5 pb-12 sm:px-6 lg:px-10 lg:pt-2">
           {children}
         </main>
       </div>
