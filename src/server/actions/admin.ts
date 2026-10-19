@@ -4,7 +4,8 @@ import { revalidatePath } from "next/cache";
 
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
-import { assetSchema, eventSchema, fieldErrorsOf, formToObject, idSchema } from "@/lib/validation";
+import { parsePriceRows } from "@/domain/price-import";
+import { assetSchema, eventSchema, fieldErrorsOf, formToObject, idSchema, priceImportSchema } from "@/lib/validation";
 
 import { fail, type ActionResult } from "../action-result";
 import { getProfile } from "../auth";
@@ -83,4 +84,57 @@ export async function runAllJobs(): Promise<ActionResult> {
   await runJobs(createAdminClient(), jobNames);
   revalidatePath("/", "layout");
   return { ok: true, message: "jobsDone" };
+}
+
+/**
+ * Saves closing prices typed or pasted by an admin, for markets that have no
+ * price API (Casablanca). The latest row becomes the asset's current price,
+ * the one before it the previous close, so the day's change shows too.
+ */
+export async function importPrices(_prev: ActionResult, formData: FormData): Promise<ActionResult> {
+  if (!(await assertAdmin())) return fail("forbidden");
+  const parsed = priceImportSchema.safeParse(formToObject(formData));
+  if (!parsed.success) return fail("checkFields", fieldErrorsOf(parsed.error));
+
+  const { points, badLines } = parsePriceRows(parsed.data.rows);
+  if (badLines.length) return fail("checkFields", { rows: "priceRows" });
+  if (points.length === 0) return fail("checkFields", { rows: "required" });
+
+  // Prices are shared reference data: no RLS write policy, so the service role
+  // writes them, after the admin check above.
+  const db = createAdminClient();
+  const { data: asset } = await db.from("assets").select("id").eq("id", parsed.data.assetId).maybeSingle();
+  if (!asset) return fail("checkFields", { assetId: "invalid" });
+
+  const { error } = await db
+    .from("asset_prices")
+    .upsert(points.map((p) => ({ asset_id: asset.id, price_date: p.date, close: p.close })));
+  if (error) return fail("generic");
+
+  // Only move the current price forward, never back to an older day.
+  const last = points.at(-1)!;
+  const { data: current } = await db.from("asset_quotes").select("as_of").eq("asset_id", asset.id).maybeSingle();
+  if (!current || current.as_of.slice(0, 10) <= last.date) {
+    const { data: prev } = await db
+      .from("asset_prices")
+      .select("close")
+      .eq("asset_id", asset.id)
+      .lt("price_date", last.date)
+      .order("price_date", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    const now = new Date().toISOString();
+    await db.from("asset_quotes").upsert({
+      asset_id: asset.id,
+      price: last.close,
+      previous_close: prev?.close ?? null,
+      // Closing prices: stamp them at the Casablanca close (15:30 local = 14:30 UTC).
+      as_of: `${last.date}T14:30:00Z`,
+      source: "manual",
+      updated_at: now,
+    });
+  }
+
+  revalidatePath("/", "layout");
+  return { ok: true, message: "pricesImported" };
 }

@@ -108,7 +108,8 @@
     "duplicateAsset": "This asset already exists on that market.",
     "confirmationMismatch": "Type DELETE to confirm.",
     "importLimit": "You've added the maximum of 25 new assets today. Try again tomorrow.",
-    "providerUnavailable": "The market data source didn't answer. Please try again in a minute."
+    "providerUnavailable": "The market data source didn't answer. Please try again in a minute.",
+    "priceRows": "Some lines can't be read. Use one line per day: date, then price (no future dates)."
   },
   "success": {
     "checkInbox": "Check your inbox to confirm your email.",
@@ -127,7 +128,8 @@
     "assetCreated": "Asset added.",
     "eventCreated": "Event added.",
     "eventDeleted": "Event deleted.",
-    "jobsDone": "Data refreshed."
+    "jobsDone": "Data refreshed.",
+    "pricesImported": "Prices saved."
   },
   "dashboard": {
     "greeting": "Hello",
@@ -416,7 +418,11 @@
     "jobRuns": "Data updates",
     "jobRunsHint": "Latest scheduled runs",
     "failed": "Failed",
-    "noRuns": "No runs yet."
+    "noRuns": "No runs yet.",
+    "prices": "Closing prices",
+    "pricesHint": "For Casablanca shares, which have no free price API. Copy the closing prices from the official site and paste them here: the chart and the portfolio update right away.",
+    "priceRows": "Date and closing price, one per line",
+    "priceRowsHint": "Paste several days to draw the chart. Formats: 16/10/2026;712,50 or 2026-10-16,712.50"
   },
   "landing": {
     "navFeatures": "Features",

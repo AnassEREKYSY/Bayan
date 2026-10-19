@@ -6,9 +6,9 @@ import { useActionState, useTransition } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import { Field, Input, Select } from "@/components/ui/form";
+import { Field, Input, Select, Textarea } from "@/components/ui/form";
 import { initialActionState } from "@/server/action-result";
-import { createAsset, createEvent, deleteEvent, runAllJobs } from "@/server/actions/admin";
+import { createAsset, createEvent, deleteEvent, importPrices, runAllJobs } from "@/server/actions/admin";
 
 import { FormError, useActionFeedback } from "./action-form";
 import { AssetSelect, type AssetOption } from "./asset-select";
@@ -152,5 +152,38 @@ export function DeleteEventButton({ id, label }: { id: string; label: string }) 
     >
       <Trash2 />
     </Button>
+  );
+}
+
+/** Paste closing prices for an asset that has no price API (Casablanca). */
+export function PriceImportForm({ assets }: { assets: AssetOption[] }) {
+  const t = useTranslations("admin");
+  const tc = useTranslations("common");
+  const [state, action, pending] = useActionState(importPrices, initialActionState);
+  const { fieldError, formError } = useActionFeedback(state);
+
+  return (
+    <form action={action} className="grid gap-4">
+      <Field id="p-asset" label={t("asset")} error={fieldError("assetId")}>
+        <AssetSelect id="p-asset" name="assetId" assets={assets} />
+      </Field>
+      <Field id="p-rows" label={t("priceRows")} hint={t("priceRowsHint")} error={fieldError("rows")}>
+        <Textarea
+          id="p-rows"
+          name="rows"
+          required
+          rows={6}
+          spellCheck={false}
+          className="font-mono text-sm"
+          placeholder={"16/10/2026;712,50\n15/10/2026;705,10"}
+        />
+      </Field>
+      <div>
+        <FormError message={formError} />
+        <Button type="submit" disabled={pending} className="mt-1">
+          {pending ? tc("saving") : tc("save")}
+        </Button>
+      </div>
+    </form>
   );
 }

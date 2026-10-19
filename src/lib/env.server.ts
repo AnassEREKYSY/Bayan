@@ -11,6 +11,8 @@ const serverSchema = z.object({
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(20),
   CRON_SECRET: z.string().min(32, "CRON_SECRET must be at least 32 characters"),
   TWELVE_DATA_API_KEY: optional,
+  /** "true" once your Twelve Data plan includes the Casablanca exchange (XCAS). */
+  TWELVE_DATA_CASABLANCA: optional.transform((v) => v === "true" || v === "1"),
   COINGECKO_API_KEY: optional,
   CASABLANCA_FEED_URL: optional.pipe(z.url().optional()),
   AI_BASE_URL: optional.pipe(z.url().optional()),

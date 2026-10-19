@@ -30,11 +30,26 @@ On top of the schedule:
 | --- | --- | --- | --- |
 | Crypto | CoinGecko | coin id, e.g. `bitcoin` | Works without a key; a free demo key raises limits |
 | US / Europe / gold / silver | Twelve Data | `AAPL`, `MC\|Euronext`, `AAPL\|XNGS` (symbol + MIC) or `XAU/USD` | Free Basic plan: 8 credits/minute, 800/day. The scheduled run makes up to 4 rounds of 8, one minute apart (~3 minutes) |
-| Bourse de Casablanca | Your JSON feed (`CASABLANCA_FEED_URL`) | the ticker, e.g. `MSA` | See format below |
+| Bourse de Casablanca | Admin → Closing prices (manual), your JSON feed (`CASABLANCA_FEED_URL`), or Twelve Data (`TWELVE_DATA_CASABLANCA=true`) | the ticker, e.g. `MSA` | See below |
 
 On the first runs, Bayan also backfills one year of daily history for assets that have little or none (2 per round).
 
 Vercel's free plan runs the schedule once a day. To refresh more often, call `GET /api/cron?jobs=fx,quotes,alerts` with the header `Authorization: Bearer <CRON_SECRET>` from any free scheduler (for example cron-job.org), a few times a day.
+
+### Casablanca: three options
+
+1. **Manual (free, works today).** Admin → *Closing prices*: pick the asset, paste one line per day
+   (`16/10/2026;712,50` or `2026-10-16,712.50`). The last line becomes the current price, the one before
+   it the previous close, and all lines feed the chart. Source the numbers from the official site
+   (casablanca-bourse.com) for your own tracking.
+2. **Twelve Data (paid, automatic).** Twelve Data lists the Casablanca exchange (MIC `XCAS`, end of day),
+   but not on the free Basic plan as far as we can tell. If your plan includes it, set
+   `TWELVE_DATA_CASABLANCA=true`: tickers are sent as `TICKER|XCAS`. Check a ticker in your Twelve Data
+   dashboard first, since their symbols may differ from the Bourse's.
+3. **Licensed feed.** Data from the Bourse's official redistributors, or from a partner like Borsalia,
+   exposed as the JSON below through `CASABLANCA_FEED_URL`. It takes priority over Twelve Data.
+
+Manual prices are never overwritten unless one of the automatic sources is configured.
 
 ### Casablanca feed format
 

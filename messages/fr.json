@@ -108,7 +108,8 @@
     "duplicateAsset": "Cet actif existe déjà sur ce marché.",
     "confirmationMismatch": "Tapez SUPPRIMER pour confirmer.",
     "importLimit": "Vous avez ajouté le maximum de 25 nouveaux actifs aujourd'hui. Réessayez demain.",
-    "providerUnavailable": "La source de données n'a pas répondu. Réessayez dans une minute."
+    "providerUnavailable": "La source de données n'a pas répondu. Réessayez dans une minute.",
+    "priceRows": "Certaines lignes sont illisibles. Une ligne par jour : la date, puis le cours (pas de date future)."
   },
   "success": {
     "checkInbox": "Consultez votre boîte mail pour confirmer votre adresse.",
@@ -127,7 +128,8 @@
     "assetCreated": "Actif ajouté.",
     "eventCreated": "Événement ajouté.",
     "eventDeleted": "Événement supprimé.",
-    "jobsDone": "Données actualisées."
+    "jobsDone": "Données actualisées.",
+    "pricesImported": "Cours enregistrés."
   },
   "dashboard": {
     "greeting": "Bonjour",
@@ -416,7 +418,11 @@
     "jobRuns": "Mises à jour des données",
     "jobRunsHint": "Dernières exécutions planifiées",
     "failed": "Échec",
-    "noRuns": "Aucune exécution pour l'instant."
+    "noRuns": "Aucune exécution pour l'instant.",
+    "prices": "Cours de clôture",
+    "pricesHint": "Pour les actions de Casablanca, qui n'ont pas d'API de cours gratuite. Copiez les cours de clôture depuis le site officiel et collez-les ici : le graphique et le portefeuille se mettent à jour aussitôt.",
+    "priceRows": "Date et cours de clôture, une ligne par jour",
+    "priceRowsHint": "Collez plusieurs jours pour tracer le graphique. Formats : 16/10/2026;712,50 ou 2026-10-16,712.50"
   },
   "landing": {
     "navFeatures": "Fonctionnalités",

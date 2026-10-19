@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
-import { AssetForm, DeleteEventButton, EventForm, RunJobsButton } from "@/components/forms/admin-forms";
+import { AssetForm, DeleteEventButton, EventForm, PriceImportForm, RunJobsButton } from "@/components/forms/admin-forms";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
 import { Badge, PageHeader } from "@/components/ui/misc";
 import { isoDay } from "@/lib/dates";
@@ -27,6 +27,8 @@ export default async function AdminPage() {
     createAdminClient().from("job_runs").select("*").order("started_at", { ascending: false }).limit(15),
   ]);
   const options = assets.map((a) => ({ id: a.id, symbol: a.symbol, name: a.name, market: a.market, currency: a.currency }));
+  // Casablanca first: those are the assets without an automatic price.
+  const casablancaFirst = [...options].sort((a, b) => Number(b.market === "casablanca") - Number(a.market === "casablanca"));
   const dateFmt = new Intl.DateTimeFormat(locale, { dateStyle: "short", timeStyle: "short" });
 
   return (
@@ -43,6 +45,12 @@ export default async function AdminPage() {
           <CardHeader title={t("addEvent")} />
           <CardBody>
             <EventForm assets={options} />
+          </CardBody>
+        </Card>
+        <Card className="lg:col-span-2">
+          <CardHeader title={t("prices")} description={t("pricesHint")} />
+          <CardBody>
+            <PriceImportForm assets={casablancaFirst} />
           </CardBody>
         </Card>
         <Card>

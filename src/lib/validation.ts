@@ -117,6 +117,11 @@ export const eventSchema = z.object({
     .transform((v) => v || null),
 });
 
+export const priceImportSchema = z.object({
+  assetId: uuid,
+  rows: z.string().trim().min(1, "required").max(120_000, "priceRows"),
+});
+
 export const idSchema = z.object({ id: uuid });
 
 /** Turns a FormData into a plain object (single values only). */

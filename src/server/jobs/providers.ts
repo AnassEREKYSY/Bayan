@@ -93,11 +93,13 @@ const twelveQuote = z.object({
   status: z.string().optional(),
 });
 
-export function twelveData(apiKey: string): MarketDataProvider {
+export function twelveData(apiKey: string, { casablanca = false } = {}): MarketDataProvider {
   const base = "https://api.twelvedata.com";
   // provider_ref is "SYMBOL", "SYMBOL|Exchange name" or "SYMBOL|MIC" (e.g. MC|XPAR).
+  // Casablanca tickers are stored bare ("AKT") and sent with the XCAS MIC.
   const params = (a: Asset) => {
-    const [symbol, venue] = refOf(a).split("|");
+    const ref = a.market === "casablanca" && !refOf(a).includes("|") ? `${refOf(a)}|XCAS` : refOf(a);
+    const [symbol, venue] = ref.split("|");
     const venueParam = !venue ? "" : /^[A-Z0-9]{4}$/.test(venue) ? `&mic_code=${venue}` : `&exchange=${encodeURIComponent(venue)}`;
     return `symbol=${encodeURIComponent(symbol ?? a.symbol)}${venueParam}`;
   };
@@ -107,7 +109,8 @@ export function twelveData(apiKey: string): MarketDataProvider {
     // Free plan: 8 credits per minute, 800 per day. One credit per asset.
     batchSize: 8,
     roundPauseMs: 61_000,
-    supports: (a) => a.market === "us" || a.market === "europe" || a.market === "commodities",
+    supports: (a) =>
+      a.market === "us" || a.market === "europe" || a.market === "commodities" || (casablanca && a.market === "casablanca"),
     async quotes(assets) {
       const results = await Promise.allSettled(
         assets.map(async (a): Promise<QuoteResult | null> => {
@@ -173,8 +176,11 @@ export function casablanca(feedUrl: string): MarketDataProvider {
 /** Providers enabled by the configured keys. */
 export function configuredProviders(env: ServerEnv): MarketDataProvider[] {
   const list: MarketDataProvider[] = [coinGecko(env.COINGECKO_API_KEY)];
-  if (env.TWELVE_DATA_API_KEY) list.push(twelveData(env.TWELVE_DATA_API_KEY));
+  // A dedicated Casablanca feed, when set, wins over Twelve Data for that market.
   if (env.CASABLANCA_FEED_URL) list.push(casablanca(env.CASABLANCA_FEED_URL));
+  if (env.TWELVE_DATA_API_KEY) {
+    list.push(twelveData(env.TWELVE_DATA_API_KEY, { casablanca: env.TWELVE_DATA_CASABLANCA && !env.CASABLANCA_FEED_URL }));
+  }
   return list;
 }
 
